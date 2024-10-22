@@ -1,2 +1,3 @@
-# AutoMakerFrontend
-Frontend for AutoMaker
+# flutter_application_1
+
+A new Flutter project.
