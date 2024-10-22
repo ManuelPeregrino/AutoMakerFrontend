@@ -1,3 +1,3 @@
-# flutter_application_1
+# AutoMaker (frontend)
 
-A new Flutter project.
+Flutter aplication.
