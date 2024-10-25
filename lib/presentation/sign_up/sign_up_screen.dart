@@ -22,14 +22,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo or placeholder for company logo
+              // Logo placeholder
               const SizedBox(height: 32),
               const Text(
                 'Company Logo Here',
                 style: AppStyles.headline3,
               ),
               const SizedBox(height: 32),
-              // Sign Up Title
               const Text(
                 'Sign Up',
                 style: AppStyles.headline1,
@@ -41,21 +40,18 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 style: AppStyles.bodyText,
               ),
               const SizedBox(height: 32),
-              // Username Input
               TextField(
                 decoration: AppStyles.inputDecoration.copyWith(
                   labelText: 'Username'
                 ),
               ),
               const SizedBox(height: 16),
-              // Email Address Input
               TextField(
                 decoration: AppStyles.inputDecoration.copyWith(
                   labelText: 'Email Address'
                 ),
               ),
               const SizedBox(height: 16),
-              // Password Input
               TextField(
                 decoration: AppStyles.inputDecoration.copyWith(
                   labelText: 'Password',
@@ -67,7 +63,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle sign up action here
                   },
                   style: AppStyles.primaryButtonStyle,
                   child: const Text(
@@ -77,7 +72,6 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              // Link to Sign Up
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.signIn);

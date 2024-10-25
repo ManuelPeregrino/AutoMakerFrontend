@@ -24,7 +24,7 @@ class AppRouter {
       case AppRoutes.reports:
         return MaterialPageRoute(builder: (_) => const ReportsScreen());
       default:
-        return MaterialPageRoute(builder: (_) => const HomeScreen()); // Por defecto, pantalla home
+        return MaterialPageRoute(builder: (_) => const HomeScreen());
     }
   }
 }

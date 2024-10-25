@@ -15,9 +15,9 @@ class AutoMakerApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppStyles.primaryColor,
           primary: AppStyles.primaryColor,
-          secondary: AppStyles.accentColor, // Set secondary color from AppStyles
+          secondary: AppStyles.accentColor,
         ),
-        textTheme: AppStyles.textTheme, // Define this in AppStyles
+        textTheme: AppStyles.textTheme, 
       ),
       initialRoute: AppRoutes.home,
       onGenerateRoute: AppRouter.generateRoute,

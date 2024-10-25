@@ -22,14 +22,13 @@ class _SignInScreenState extends State<SignInScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo or placeholder for company logo
+              // Logo placeholder
               const SizedBox(height: 32),
               const Text(
                 'Company Logo Here',
                 style: AppStyles.headline3,
               ),
               const SizedBox(height: 32),
-              // Sign In Title
               const Text(
                 'Sign In',
                 style: AppStyles.headline1,
@@ -41,21 +40,18 @@ class _SignInScreenState extends State<SignInScreen> {
                 style: AppStyles.bodyText,
               ),
               const SizedBox(height: 32),
-              // Username Input
               TextField(
                 decoration: AppStyles.inputDecoration.copyWith(
                   labelText: 'Username'
                 ),
               ),
               const SizedBox(height: 16),
-              // Password Input
               TextField(
                 decoration: AppStyles.inputDecoration.copyWith(
                   labelText: 'Password'
                 ),
               ),
               const SizedBox(height: 16),
-              // Remember Me and Forgot Password Row
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -74,7 +70,6 @@ class _SignInScreenState extends State<SignInScreen> {
                   ),
                   TextButton(
                     onPressed: () {
-                      // Handle forgot password action here
                     },
                     child: const Text(
                       'Forgot Password?',
@@ -84,12 +79,10 @@ class _SignInScreenState extends State<SignInScreen> {
                 ],
               ),
               const SizedBox(height: 24),
-              // Sign In Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
                   onPressed: () {
-                    // Handle sign in action here
                   },
                   style: AppStyles.primaryButtonStyle,
                   child: const Text(
@@ -99,7 +92,6 @@ class _SignInScreenState extends State<SignInScreen> {
                 ),
               ),
               const SizedBox(height: 24),
-              // Link to Sign Up
               TextButton(
                 onPressed: () {
                   Navigator.pushNamed(context, AppRoutes.signUp);

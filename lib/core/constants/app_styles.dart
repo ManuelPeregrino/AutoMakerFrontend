@@ -1,20 +1,18 @@
 import 'package:flutter/material.dart';
 
 class AppStyles {
-  // Define the main colors used in your app
   static const Color primaryColor =
-      Color(0xFFFFA500); // Orange accent color for buttons and highlights
-  static const Color accentColor = Colors.blue; // Define an accent color
+      Color(0xFFFFA500);
+  static const Color accentColor = Colors.blue;
   static const Color backgroundColor =
-      Color(0xFFF5F5F5); // Light grey background
-  static const Color textColor = Color(0xFF333333); // Dark grey for main text
+      Color(0xFFF5F5F5);
+  static const Color textColor = Color(0xFF333333);
   static const Color subtitleColor =
-      Color(0xFF888888); // Lighter grey for subtitles
-  static const Color iconColor = Colors.black87; // Slightly darker icons
-  static const Color cardColor = Colors.white; // White background for cards
-  static const Color borderColor = Color(0xFFE0E0E0); // Light border color
+      Color(0xFF888888);
+  static const Color iconColor = Colors.black87;
+  static const Color cardColor = Colors.white;
+  static const Color borderColor = Color(0xFFE0E0E0);
 
-  // Define the textTheme for the app
   static const TextTheme textTheme = TextTheme(
     displayLarge: headline1,
     displayMedium: headline2,
@@ -24,7 +22,6 @@ class AppStyles {
     labelLarge: buttonText,
   );
 
-  // Text styles
   static const TextStyle headline1 = TextStyle(
     fontSize: 32,
     fontWeight: FontWeight.bold,
@@ -67,7 +64,6 @@ class AppStyles {
     color: primaryColor,
   );
 
-  // Box decorations
   static final BoxDecoration cardDecoration = BoxDecoration(
     color: cardColor,
     borderRadius: BorderRadius.circular(12),
@@ -76,23 +72,21 @@ class AppStyles {
         color: Colors.black.withOpacity(0.1),
         spreadRadius: 2,
         blurRadius: 4,
-        offset: const Offset(0, 2), // Changes position of shadow
+        offset: const Offset(0, 2),
       ),
     ],
   );
 
-  // Button styles
   static final ButtonStyle primaryButtonStyle = ElevatedButton.styleFrom(
-    backgroundColor: primaryColor, // Use 'backgroundColor' instead of 'primary'
+    backgroundColor: primaryColor,
     foregroundColor:
-        Colors.white, // Use 'foregroundColor' instead of 'onPrimary'
+        Colors.white,
     shape: RoundedRectangleBorder(
       borderRadius: BorderRadius.circular(8),
     ),
     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 24),
   );
 
-  // Input decoration
   static final InputDecoration inputDecoration = InputDecoration(
     filled: true,
     fillColor: Colors.white,
