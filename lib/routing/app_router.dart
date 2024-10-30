@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../core/constants/app_routes.dart';
 import '../presentation/home/home_screen.dart';
 import '../presentation/printers/printers_screen.dart';
+import '../presentation/printer/printer_screen.dart';
 import '../presentation/profile/profile_screen.dart';
 import '../presentation/reports/reports_screen.dart';
 import '../presentation/sign_in/sign_in_screen.dart';
@@ -21,6 +22,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case AppRoutes.printers:
         return MaterialPageRoute(builder: (_) => const PrintersScreen());
+      case AppRoutes.printer:
+        return MaterialPageRoute(builder: (_) => const PrinterScreen());
       case AppRoutes.reports:
         return MaterialPageRoute(builder: (_) => const ReportsScreen());
       default:

@@ -1,108 +1,129 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../core/constants/app_styles.dart';
 import '../../core/constants/app_routes.dart';
+import 'sign_in_viewmodel.dart';
 
-class SignInScreen extends StatefulWidget {
+class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
   @override
-  _SignInScreenState createState() => _SignInScreenState();
-}
-
-class _SignInScreenState extends State<SignInScreen> {
-  bool rememberMe = false;
-
-  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppStyles.backgroundColor,
-      body: Center(
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.symmetric(horizontal: 24),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Logo placeholder
-              const SizedBox(height: 32),
-              const Text(
-                'Company Logo Here',
-                style: AppStyles.headline3,
-              ),
-              const SizedBox(height: 32),
-              const Text(
-                'Sign In',
-                style: AppStyles.headline1,
-              ),
-              const SizedBox(height: 16),
-              const Text(
-                'Enter your login credentials and submit to access your account',
-                textAlign: TextAlign.center,
-                style: AppStyles.bodyText,
-              ),
-              const SizedBox(height: 32),
-              TextField(
-                decoration: AppStyles.inputDecoration.copyWith(
-                  labelText: 'Username'
-                ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                decoration: AppStyles.inputDecoration.copyWith(
-                  labelText: 'Password'
-                ),
-              ),
-              const SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: rememberMe,
-                        onChanged: (value) {
-                          setState(() {
-                            rememberMe = value ?? false;
-                          });
-                        },
-                      ),
-                      const Text('Remember Me'),
-                    ],
-                  ),
-                  TextButton(
-                    onPressed: () {
-                    },
-                    child: const Text(
-                      'Forgot Password?',
-                      style: AppStyles.linkText,
+    return ChangeNotifierProvider(
+      create: (_) => SignInViewModel(),
+      child: Scaffold(
+        backgroundColor: AppStyles.backgroundColor,
+        body: Center(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.symmetric(horizontal: 24),
+            child: Consumer<SignInViewModel>(
+              builder: (context, viewModel, child) {
+                return Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const SizedBox(height: 32),
+                    const Text(
+                      'Company Logo Here',
+                      style: AppStyles.headline3,
                     ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 24),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                  },
-                  style: AppStyles.primaryButtonStyle,
-                  child: const Text(
-                    'Sign In',
-                    style: AppStyles.buttonText,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 24),
-              TextButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, AppRoutes.signUp);
-                },
-                child: const Text(
-                  "Don't have an account? Sign up",
-                  style: AppStyles.linkText,
-                ),
-              ),
-              const SizedBox(height: 16),
-            ],
+                    const SizedBox(height: 32),
+                    const Text(
+                      'Sign In',
+                      style: AppStyles.headline1,
+                    ),
+                    const SizedBox(height: 16),
+                    const Text(
+                      'Enter your login credentials and submit to access your account',
+                      textAlign: TextAlign.center,
+                      style: AppStyles.bodyText,
+                    ),
+                    const SizedBox(height: 32),
+                    TextField(
+                      onChanged: (value) {
+                        viewModel.setUsername(value);
+                      },
+                      decoration: AppStyles.inputDecoration.copyWith(
+                        labelText: 'Username',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      onChanged: (value) {
+                        viewModel.setPassword(value);
+                      },
+                      obscureText: true,
+                      decoration: AppStyles.inputDecoration.copyWith(
+                        labelText: 'Password',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            Checkbox(
+                              value: viewModel.rememberMe,
+                              onChanged: (value) {
+                                viewModel.setRememberMe(value ?? false);
+                              },
+                            ),
+                            const Text('Remember Me'),
+                          ],
+                        ),
+                        TextButton(
+                          onPressed: () {
+                          },
+                          child: const Text(
+                            'Forgot Password?',
+                            style: AppStyles.linkText,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 24),
+                    if (viewModel.errorMessage != null)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Text(
+                          viewModel.errorMessage!,
+                          style: const TextStyle(
+                            color: Colors.red,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    if (viewModel.isLoading)
+                      const CircularProgressIndicator(),
+                    if (!viewModel.isLoading)
+                      SizedBox(
+                        width: double.infinity,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            viewModel.signIn();
+                          },
+                          style: AppStyles.primaryButtonStyle,
+                          child: const Text(
+                            'Sign In',
+                            style: AppStyles.buttonText,
+                          ),
+                        ),
+                      ),
+                    const SizedBox(height: 24),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.signUp);
+                      },
+                      child: const Text(
+                        "Don't have an account? Sign up",
+                        style: AppStyles.linkText,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

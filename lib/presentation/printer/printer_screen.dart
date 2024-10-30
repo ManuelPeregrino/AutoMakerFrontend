@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class PrinterScreen extends StatelessWidget {
-  const PrinterScreen({super.key});
+class PrintersScreen extends StatelessWidget {
+  const PrintersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Printer'),
+        title: const Text('Printers'),
       ),
       body: const Center(
         child: Text(
-          'Printer Screen',
+          'Printers Screen',
           style: TextStyle(fontSize: 24),
         ),
       ),

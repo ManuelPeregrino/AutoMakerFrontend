@@ -4,5 +4,6 @@ class AppRoutes {
   static const String signUp = '/sign-up';
   static const String profile = '/profile';
   static const String printers = '/printers';
+  static const String printer = '/printer';
   static const String reports = '/reports';
 }
