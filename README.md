@@ -1,3 +1,3 @@
-# flutter_application_1
+# AUTOMAKER
 
 A new Flutter project.
