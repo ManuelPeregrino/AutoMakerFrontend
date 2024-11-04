@@ -40,17 +40,12 @@ class SignUpViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.delayed(const Duration(seconds: 2)); // Simulate API call
-
-      // Reset form fields on successful registration
+      await Future.delayed(const Duration(seconds: 2));
       _username = '';
       _email = '';
       _password = '';
       _isLoading = false;
       notifyListeners();
-
-      // After successful registration, navigate or show success message
-      // For example, navigate back to sign-in screen
 
     } catch (e) {
       _errorMessage = 'An error occurred during registration';
