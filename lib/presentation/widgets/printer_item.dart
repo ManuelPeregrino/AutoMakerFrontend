@@ -3,12 +3,22 @@ import 'package:flutter/material.dart';
 class PrinterItem extends StatelessWidget {
   final String printerName;
   final String printerModel;
+  final String status;
+  final int progress;
+  final int extruderTemp;
+  final int bedTemp;
+  final Color statusColor;
   final VoidCallback onTap;
 
   const PrinterItem({
     super.key,
     required this.printerName,
     required this.printerModel,
+    required this.status,
+    required this.progress,
+    required this.extruderTemp,
+    required this.bedTemp,
+    required this.statusColor,
     required this.onTap,
   });
 
@@ -38,7 +48,7 @@ class PrinterItem extends StatelessWidget {
                 decoration: const BoxDecoration(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
                   image: DecorationImage(
-                    image: AssetImage('assets/printer_image.png'), 
+                    image: AssetImage('assets/printer_image.png'),
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -53,7 +63,28 @@ class PrinterItem extends StatelessWidget {
                     printerName,
                     style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text(printerModel, style: const TextStyle(color: Colors.grey)),
+                  Text(
+                    printerModel,
+                    style: const TextStyle(color: Colors.grey),
+                  ),
+                  const SizedBox(height: 8),
+                  Row(
+                    children: [
+                      Icon(Icons.thermostat, color: statusColor, size: 16),
+                      const SizedBox(width: 4),
+                      Text('$extruderTemp°C'),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Progress: $progress%',
+                    style: const TextStyle(color: Colors.blueGrey),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Status: $status',
+                    style: TextStyle(color: statusColor),
+                  ),
                 ],
               ),
             ),

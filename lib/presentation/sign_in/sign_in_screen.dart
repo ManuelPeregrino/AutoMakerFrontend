@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/constants/app_styles.dart';
 import '../../core/constants/app_routes.dart';
-import 'sign_in_viewmodel.dart';
+import 'sign_in_view_model.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});

@@ -44,8 +44,8 @@ class HomeScreen extends StatelessWidget {
                         children: [
                           const CircleAvatar(
                             radius: 40,
-                            backgroundImage: AssetImage(
-                                'assets/profile_image.png'),
+                            backgroundImage:
+                                AssetImage('assets/profile_image.png'),
                           ),
                           const SizedBox(height: 12),
                           Text(
@@ -67,14 +67,12 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-
                     const ReportCard(
                       title: 'Gastos vs Ingresos',
-                      value: '4K',
+                      value: 'Value',
                       borderColor: Colors.greenAccent,
                     ),
                     const SizedBox(height: 24),
-
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -108,18 +106,36 @@ class HomeScreen extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemCount: viewModel.printers.length,
                         itemBuilder: (context, index) {
+                          final printer = viewModel.printers[index];
                           return Padding(
                             padding: const EdgeInsets.symmetric(horizontal: 8),
                             child: PrinterItem(
-                              printerName: viewModel.printers[index],
+                              printerName: printer.name,
                               printerModel: 'Printer model',
+                              status: printer.status,
+                              progress: printer.progress,
+                              extruderTemp: printer.extruderTemp,
+                              bedTemp: printer.bedTemp,
+                              statusColor: printer.statusColor,
                               onTap: () {
+                                Navigator.pushNamed(
+                                  context,
+                                  AppRoutes.printer,
+                                  arguments: {
+                                    'printerName': printer.name,
+                                    'status': printer.status,
+                                    'progress': printer.progress,
+                                    'extruderTemp': printer.extruderTemp,
+                                    'bedTemp': printer.bedTemp,
+                                    'statusColor': printer.statusColor,
+                                  },
+                                );
                               },
                             ),
                           );
                         },
                       ),
-                    ),
+                    )
                   ],
                 ),
               ),

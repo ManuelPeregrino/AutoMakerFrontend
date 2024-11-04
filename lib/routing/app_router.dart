@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import '../core/constants/app_routes.dart';
 import '../presentation/home/home_screen.dart';
-import '../presentation/printers/printers_screen.dart';
+import '../presentation/printers/printers_list_screen.dart';
 import '../presentation/printer/printer_screen.dart';
 import '../presentation/profile/profile_screen.dart';
 import '../presentation/reports/reports_screen.dart';
 import '../presentation/sign_in/sign_in_screen.dart';
 import '../presentation/sign_up/sign_up_screen.dart';
-
 
 class AppRouter {
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -21,9 +20,20 @@ class AppRouter {
       case AppRoutes.profile:
         return MaterialPageRoute(builder: (_) => const ProfileScreen());
       case AppRoutes.printers:
-        return MaterialPageRoute(builder: (_) => const PrintersScreen());
+        return MaterialPageRoute(builder: (_) => const PrintersListScreen());
       case AppRoutes.printer:
-        return MaterialPageRoute(builder: (_) => const PrinterScreen());
+        final printerData = settings.arguments as Map<String, dynamic>;
+        return MaterialPageRoute(
+          builder: (_) => PrinterScreen(
+            printerName: printerData['printerName'],
+            status: printerData['status'],
+            progress: printerData['progress'],
+            extruderTemp: printerData['extruderTemp'],
+            bedTemp: printerData['bedTemp'],
+            statusColor: printerData['statusColor'],
+          ),
+        );
+
       case AppRoutes.reports:
         return MaterialPageRoute(builder: (_) => const ReportsScreen());
       default:

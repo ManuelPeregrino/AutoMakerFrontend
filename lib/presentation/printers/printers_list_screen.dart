@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'printers_viewmodel.dart';
+import 'printers_list_view_model.dart';
 
-class PrintersScreen extends StatelessWidget {
-  const PrintersScreen({super.key});
+class PrintersListScreen extends StatelessWidget {
+  const PrintersListScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => PrintersViewModel(),
+      create: (_) => PrintersListViewModel(),
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Eduardo’s Farm'),
         ),
-        body: Consumer<PrintersViewModel>(
+        body: Consumer<PrintersListViewModel>(
           builder: (context, model, child) {
             return Padding(
               padding: const EdgeInsets.all(16.0),

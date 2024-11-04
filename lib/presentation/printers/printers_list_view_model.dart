@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-class PrintersViewModel extends ChangeNotifier {
+class PrintersListViewModel extends ChangeNotifier {
   final List<Printer> printers = [
     Printer(
       name: 'Printer 1',
