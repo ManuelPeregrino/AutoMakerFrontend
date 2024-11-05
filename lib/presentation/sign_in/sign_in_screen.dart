@@ -72,8 +72,7 @@ class SignInScreen extends StatelessWidget {
                           ],
                         ),
                         TextButton(
-                          onPressed: () {
-                          },
+                          onPressed: () {},
                           child: const Text(
                             'Forgot Password?',
                             style: AppStyles.linkText,
@@ -93,14 +92,18 @@ class SignInScreen extends StatelessWidget {
                           ),
                         ),
                       ),
-                    if (viewModel.isLoading)
-                      const CircularProgressIndicator(),
+                    if (viewModel.isLoading) const CircularProgressIndicator(),
                     if (!viewModel.isLoading)
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: () {
-                            viewModel.signIn();
+                          onPressed: () async {
+                            await viewModel.signIn();
+                            if (viewModel.errorMessage == null &&
+                                context.mounted) {
+                              Navigator.pushReplacementNamed(
+                                  context, AppRoutes.home);
+                            }
                           },
                           style: AppStyles.primaryButtonStyle,
                           child: const Text(

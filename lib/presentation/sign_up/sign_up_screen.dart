@@ -76,13 +76,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           ),
                         ),
                       ),
-                    if (viewModel.isLoading)
-                      const CircularProgressIndicator(),
+                    if (viewModel.isLoading) const CircularProgressIndicator(),
                     if (!viewModel.isLoading)
                       SizedBox(
                         width: double.infinity,
                         child: ElevatedButton(
-                          onPressed: viewModel.signUp,
+                          onPressed: () async {
+                            await viewModel.signUp();
+                            if (viewModel.errorMessage == null &&
+                                context.mounted) {
+                              Navigator.pushReplacementNamed(
+                                  context, AppRoutes.signIn);
+                            }
+                          },
                           style: AppStyles.primaryButtonStyle,
                           child: const Text(
                             'Sign Up',

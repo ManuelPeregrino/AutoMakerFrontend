@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignUpViewModel extends ChangeNotifier {
   String _username = '';
@@ -40,17 +42,30 @@ class SignUpViewModel extends ChangeNotifier {
     notifyListeners();
 
     try {
-      await Future.delayed(const Duration(seconds: 2));
-      _username = '';
-      _email = '';
-      _password = '';
-      _isLoading = false;
-      notifyListeners();
+      final response = await http.post(
+        Uri.parse('[api url]'),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({
+          'username': _username,
+          'email': _email,
+          'password': _password,
+        }),
+      );
 
+      if (response.statusCode == 200) {
+        _username = '';
+        _email = '';
+        _password = '';
+        _errorMessage = null;
+      } else {
+        final responseData = jsonDecode(response.body);
+        _errorMessage = responseData['message'] ?? 'Registration failed';
+      }
     } catch (e) {
       _errorMessage = 'An error occurred during registration';
-      _isLoading = false;
-      notifyListeners();
     }
+
+    _isLoading = false;
+    notifyListeners();
   }
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class SignInViewModel extends ChangeNotifier {
   String _username = '';
@@ -39,14 +41,26 @@ class SignInViewModel extends ChangeNotifier {
     _isLoading = true;
     notifyListeners();
 
-    try {
-      await Future.delayed(const Duration(seconds: 2));
+    final url = Uri.parse('[aca el endpoint]');
+    final headers = {'Content-Type': 'application/json'};
+    final body = json.encode({
+      'username': _username,
+      'password': _password,
+    });
 
-      if (_username == 'admin' && _password == 'admin') {
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        String token = data['token'];
+
+        _isLoading = false;
         _username = '';
         _password = '';
-        _isLoading = false;
+        _errorMessage = null;
         notifyListeners();
+
       } else {
         _errorMessage = 'Invalid username or password';
         _isLoading = false;
