@@ -32,14 +32,14 @@ class SignInScreen extends StatelessWidget {
                       style: AppStyles.headline1,
                     ),
                     const SizedBox(height: 16),
+                    const Text(
+                      'Enter your login credentials and submit to access your account',
+                      textAlign: TextAlign.center,
+                      style: AppStyles.bodyText,
+                    ),
+                    const SizedBox(height: 32),
                     // Mostrar formulario de login solo si no se muestra el QR
                     if (viewModel.qrImageBytes == null) ...[
-                      const Text(
-                        'Enter your login credentials and submit to access your account',
-                        textAlign: TextAlign.center,
-                        style: AppStyles.bodyText,
-                      ),
-                      const SizedBox(height: 32),
                       TextField(
                         onChanged: (value) {
                           viewModel.setEmail(value);

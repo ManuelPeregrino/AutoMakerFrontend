@@ -69,7 +69,8 @@ class SignInViewModel extends ChangeNotifier {
         notifyListeners();
       }
     } catch (e) {
-      _errorMessage = 'An error occurred during login';
+      _errorMessage = 'Network error: $e';
+    } finally {
       _isLoading = false;
       notifyListeners();
     }
@@ -106,6 +107,7 @@ class SignInViewModel extends ChangeNotifier {
     if (_accessToken == null) return false;
 
     if (!_isTwoFactorEnabled) {
+      // Caso cuando 2FA aún no está habilitado
       final url = Uri.parse(
           'https://apiautomakerhost.serveirc.com/api/v1/2fa/turn-on-qr');
       final headers = {
@@ -144,7 +146,11 @@ class SignInViewModel extends ChangeNotifier {
   }
 
   Future<bool> authenticateTwoFactorCode(String code) async {
-    if (_accessToken == null) return false;
+    if (_accessToken == null) {
+      _errorMessage = 'Access token is missing';
+      notifyListeners();
+      return false;
+    }
 
     final url = Uri.parse(
         'https://apiautomakerhost.serveirc.com/api/v1/2fa/authenticate');
@@ -159,12 +165,15 @@ class SignInViewModel extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         final data = json.decode(response.body);
-        if (data['authenticated'] == true) {
+
+        // Verificar si el usuario está activo y si el código es correcto
+        if (data['userDB']['active'] == true) {
           _errorMessage = null;
           notifyListeners();
           return true;
         } else {
-          _errorMessage = 'Invalid authentication code';
+          // Si el usuario no está activo o el código es incorrecto
+          _errorMessage = 'Invalid authentication code or inactive user';
           notifyListeners();
           return false;
         }
