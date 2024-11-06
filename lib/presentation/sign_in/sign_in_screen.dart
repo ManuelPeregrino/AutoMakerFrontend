@@ -40,10 +40,10 @@ class SignInScreen extends StatelessWidget {
                     const SizedBox(height: 32),
                     TextField(
                       onChanged: (value) {
-                        viewModel.setUsername(value);
+                        viewModel.setEmail(value);
                       },
                       decoration: AppStyles.inputDecoration.copyWith(
-                        labelText: 'Username',
+                        labelText: 'Email',
                       ),
                     ),
                     const SizedBox(height: 16),
