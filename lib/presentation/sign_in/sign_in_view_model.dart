@@ -58,11 +58,20 @@ class SignInViewModel extends ChangeNotifier {
 
       if (response.statusCode == 201) {
         final data = json.decode(response.body);
-        _accessToken = data['access_token'];
-        _userDetails = data['user'];
-        _isTwoFactorEnabled = data['user']['isTwoFactorEnable'];
-        _isLoading = false;
-        notifyListeners();
+
+        // Verificar si el usuario está activo y si el código es correcto
+        if (data['user']['active'] == true) {
+          _accessToken = data['access_token'];
+          _userDetails = data['user'];
+          _isTwoFactorEnabled = data['user']['isTwoFactorEnable'];
+          _isLoading = false;
+          notifyListeners();
+        } else {
+          // Si el usuario no está activo o el código es incorrecto
+          _errorMessage = 'Invalid authentication code or inactive user';
+          _isLoading = false;
+          notifyListeners();
+        }
       } else {
         _errorMessage = 'Invalid email or password';
         _isLoading = false;
