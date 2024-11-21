@@ -3,18 +3,37 @@ import 'package:provider/provider.dart';
 import 'printer_view_model.dart';
 
 class PrinterScreen extends StatelessWidget {
-  const PrinterScreen({super.key, required printerName, required status, required progress, required extruderTemp, required bedTemp, required statusColor});
+  final String printerId;
+
+  const PrinterScreen({super.key, required this.printerId});
 
   @override
   Widget build(BuildContext context) {
-    return ChangeNotifierProvider(
-      create: (_) => PrinterViewModel(),
+    return ChangeNotifierProvider<PrinterViewModel>(
+      create: (_) {
+        final viewModel = PrinterViewModel();
+        viewModel.fetchPrinterData(printerId);
+        return viewModel;
+      },
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Printer'),
         ),
         body: Consumer<PrinterViewModel>(
           builder: (context, model, child) {
+            if (model.isLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (model.errorMessage != null) {
+              return Center(
+                child: Text(
+                  model.errorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              );
+            }
+
             return Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -54,26 +73,6 @@ class PrinterScreen extends StatelessWidget {
                         ],
                       ),
                       leading: const Icon(Icons.thermostat),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Card(
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text('Historial de Impresiones'),
-                          const SizedBox(height: 8),
-                          Container(
-                            height: 150,
-                            color: Colors.grey[200],
-                            child: const Center(
-                              child: Text('Placeholder for Print History'),
-                            ),
-                          ),
-                        ],
-                      ),
                     ),
                   ),
                   const SizedBox(height: 16),

@@ -1,32 +1,66 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class PrinterViewModel extends ChangeNotifier {
-  String printerName = "Printer #1";
-  String printStatus = "Active";
-  double progress = 75;
-  String remainingTime = "1h 23m";
+  String printerName = "";
+  String printStatus = "";
+  double progress = 0.0;
+  String remainingTime = "";
 
-  double extruderTempCurrent = 210;
-  double extruderTempTarget = 215;
-  double bedTempCurrent = 60;
-  double bedTempTarget = 60;
+  double extruderTempCurrent = 0.0;
+  double extruderTempTarget = 0.0;
+  double bedTempCurrent = 0.0;
+  double bedTempTarget = 0.0;
 
-  double filamentLength = 345.5;
-  double filamentVolume = 78.3;
+  double filamentLength = 0.0;
+  double filamentVolume = 0.0;
 
-  Map<String, int> printHistory = {
-    "Mon": 4,
-    "Tue": 8,
-    "Wed": 6,
-    "Thu": 5,
-    "Fri": 7,
-    "Sat": 3,
-    "Sun": 2,
-  };
+  bool _isLoading = false;
+  String? _errorMessage;
 
-  void updateProgress(double newProgress) {
-    progress = newProgress;
+  bool get isLoading => _isLoading;
+  String? get errorMessage => _errorMessage;
+
+  Future<void> fetchPrinterData(String printerId) async {
+    _isLoading = true;
+    _errorMessage = null;
     notifyListeners();
-  }
 
+    final url =
+        Uri.parse('https://exampleapi.com/api/v1/printer/$printerId'); // URL
+    final headers = {'Content-Type': 'application/json'};
+
+    try {
+      final response = await http.get(url, headers: headers);
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+
+        printerName = data['printerId'] ?? "";
+        printStatus = data['printStatus'] ?? "";
+        progress = (data['progress'] ?? 0).toDouble();
+        remainingTime = data['remainingTime'] ?? "";
+
+        extruderTempCurrent = (data['extruderTempCurrent'] ?? 0).toDouble();
+        extruderTempTarget = (data['extruderTempTarget'] ?? 0).toDouble();
+        bedTempCurrent = (data['bedTempCurrent'] ?? 0).toDouble();
+        bedTempTarget = (data['bedTempTarget'] ?? 0).toDouble();
+
+        filamentLength = (data['filamentLength'] ?? 0).toDouble();
+        filamentVolume = (data['filamentVolume'] ?? 0).toDouble();
+
+        _isLoading = false;
+        notifyListeners();
+      } else {
+        _errorMessage = "Error: ${response.reasonPhrase}";
+        _isLoading = false;
+        notifyListeners();
+      }
+    } catch (e) {
+      _errorMessage = "Error de red: $e";
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
 }

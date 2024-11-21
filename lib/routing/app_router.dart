@@ -4,7 +4,6 @@ import '../presentation/home/home_screen.dart';
 import '../presentation/printers/printers_list_screen.dart';
 import '../presentation/printer/printer_screen.dart';
 import '../presentation/profile/profile_screen.dart';
-import '../presentation/reports/reports_screen.dart';
 import '../presentation/sign_in/sign_in_screen.dart';
 import '../presentation/sign_up/sign_up_screen.dart';
 
@@ -22,20 +21,10 @@ class AppRouter {
       case AppRoutes.printers:
         return MaterialPageRoute(builder: (_) => const PrintersListScreen());
       case AppRoutes.printer:
-        final printerData = settings.arguments as Map<String, dynamic>;
+        final printerId = settings.arguments as String;
         return MaterialPageRoute(
-          builder: (_) => PrinterScreen(
-            printerName: printerData['printerName'],
-            status: printerData['status'],
-            progress: printerData['progress'],
-            extruderTemp: printerData['extruderTemp'],
-            bedTemp: printerData['bedTemp'],
-            statusColor: printerData['statusColor'],
-          ),
+          builder: (_) => PrinterScreen(printerId: printerId),
         );
-
-      case AppRoutes.reports:
-        return MaterialPageRoute(builder: (_) => const ReportsScreen());
       default:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
     }

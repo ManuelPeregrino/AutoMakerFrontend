@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../core/constants/app_routes.dart';
+import 'home_viewmodel.dart';
 import '../widgets/ham_menu.dart';
 import '../widgets/printer_item.dart';
 import '../widgets/report_card.dart';
-import 'home_viewmodel.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -12,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => HomeViewModel(),
+      create: (_) => HomeViewModel()..fetchPrinters(),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -67,75 +66,50 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    const ReportCard(
-                      title: 'Gastos vs Ingresos',
-                      value: 'Value',
-                      borderColor: Colors.greenAccent,
-                    ),
-                    const SizedBox(height: 24),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Printers',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            viewModel.navigateToPrinters(
-                                context, AppRoutes.printers);
-                          },
-                          child: const Text(
-                            'View all',
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.blue,
-                            ),
-                          ),
-                        ),
-                      ],
+                    const Text(
+                      'Reports',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                     const SizedBox(height: 16),
-                    SizedBox(
-                      height: 200,
-                      child: ListView.builder(
-                        scrollDirection: Axis.horizontal,
-                        itemCount: viewModel.printers.length,
-                        itemBuilder: (context, index) {
-                          final printer = viewModel.printers[index];
-                          return Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 8),
-                            child: PrinterItem(
-                              printerName: printer.name,
-                              printerModel: 'Printer model',
-                              status: printer.status,
-                              progress: printer.progress,
-                              extruderTemp: printer.extruderTemp,
-                              bedTemp: printer.bedTemp,
-                              statusColor: printer.statusColor,
-                              onTap: () {
-                                Navigator.pushNamed(
-                                  context,
-                                  AppRoutes.printer,
-                                  arguments: {
-                                    'printerName': printer.name,
-                                    'status': printer.status,
-                                    'progress': printer.progress,
-                                    'extruderTemp': printer.extruderTemp,
-                                    'bedTemp': printer.bedTemp,
-                                    'statusColor': printer.statusColor,
-                                  },
-                                );
-                              },
-                            ),
-                          );
-                        },
+                    ReportCard(
+                      title: 'Gastos e Ingresos',
+                      value: 'Placeholder',
+                      borderColor: Colors.green,
+                    ),
+                    const SizedBox(height: 24),
+                    const Text(
+                      'Printers',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
                       ),
-                    )
+                    ),
+                    const SizedBox(height: 16),
+                    viewModel.isLoading
+                        ? const Center(child: CircularProgressIndicator())
+                        : GridView.builder(
+                            shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 10,
+                              mainAxisSpacing: 10,
+                              childAspectRatio: 1,
+                            ),
+                            itemCount: viewModel.printers.length,
+                            itemBuilder: (context, index) {
+                              final printer = viewModel.printers[index];
+                              return PrinterItem(
+                                printerName: printer.name,
+                                onTap: () => viewModel.navigateToPrinter(
+                                    context, printer.id),
+                              );
+                            },
+                          ),
                   ],
                 ),
               ),

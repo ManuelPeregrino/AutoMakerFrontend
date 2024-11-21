@@ -44,10 +44,10 @@ class HamMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            leading: const Icon(Icons.bar_chart),
-            title: const Text('Reports'),
+            leading: const Icon(Icons.print),
+            title: const Text('Printer'),
             onTap: () {
-              Navigator.pushNamed(context, AppRoutes.reports);
+              Navigator.pushNamed(context, AppRoutes.printer);
             },
           ),
           ListTile(
