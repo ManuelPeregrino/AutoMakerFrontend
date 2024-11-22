@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../core/constants/app_routes.dart';
 import '../presentation/home/home_screen.dart';
 import '../presentation/printers/printers_list_screen.dart';
 import '../presentation/printer/printer_screen.dart';
 import '../presentation/profile/profile_screen.dart';
+import '../presentation/profile/profile_view_model.dart';
 import '../presentation/sign_in/sign_in_screen.dart';
 import '../presentation/sign_up/sign_up_screen.dart';
 
@@ -17,7 +19,12 @@ class AppRouter {
       case AppRoutes.home:
         return MaterialPageRoute(builder: (_) => const HomeScreen());
       case AppRoutes.profile:
-        return MaterialPageRoute(builder: (_) => const ProfileScreen());
+        return MaterialPageRoute(
+          builder: (_) => ChangeNotifierProvider(
+            create: (_) => ProfileViewModel(),
+            child: const ProfileScreen(),
+          ),
+        );
       case AppRoutes.printers:
         return MaterialPageRoute(builder: (_) => const PrintersListScreen());
       case AppRoutes.printer:
