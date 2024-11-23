@@ -19,7 +19,7 @@ class AutoMakerApp extends StatelessWidget {
         ),
         textTheme: AppStyles.textTheme,
       ),
-      initialRoute: AppRoutes.home,
+      initialRoute: AppRoutes.signIn,
       onGenerateRoute: AppRouter.generateRoute,
     );
   }

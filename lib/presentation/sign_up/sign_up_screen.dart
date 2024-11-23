@@ -28,25 +28,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   children: [
                     const SizedBox(height: 32),
                     const Text(
-                      'Company Logo Here',
-                      style: AppStyles.headline3,
+                      'AUTOMAKER',
+                      style: TextStyle(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.orange,
+                      ),
                     ),
                     const SizedBox(height: 32),
                     const Text(
-                      'Sign Up',
+                      'Create Account',
                       style: AppStyles.headline1,
                     ),
                     const SizedBox(height: 16),
-                    const Text(
-                      'Complete the form below to register a new account.',
-                      textAlign: TextAlign.center,
-                      style: AppStyles.bodyText,
-                    ),
-                    const SizedBox(height: 32),
                     TextField(
-                      onChanged: viewModel.setUsername,
+                      onChanged: viewModel.setFirstName,
                       decoration: AppStyles.inputDecoration.copyWith(
-                        labelText: 'Username',
+                        labelText: 'First Name',
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    TextField(
+                      onChanged: viewModel.setLastName,
+                      decoration: AppStyles.inputDecoration.copyWith(
+                        labelText: 'Last Name',
                       ),
                     ),
                     const SizedBox(height: 16),
@@ -85,13 +90,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             await viewModel.signUp();
                             if (viewModel.errorMessage == null &&
                                 context.mounted) {
-                              Navigator.pushReplacementNamed(
-                                  context, AppRoutes.signIn);
+                              showDialog(
+                                context: context,
+                                builder: (context) => AlertDialog(
+                                  title: const Text('Registration Successful'),
+                                  content: const Text(
+                                    'Your account has been successfully created. You can now log in.',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () {
+                                        Navigator.of(context).pop();
+                                        Navigator.pushReplacementNamed(
+                                            context, AppRoutes.signIn);
+                                      },
+                                      child: const Text('OK'),
+                                    ),
+                                  ],
+                                ),
+                              );
                             }
                           },
                           style: AppStyles.primaryButtonStyle,
                           child: const Text(
-                            'Sign Up',
+                            'Register',
                             style: AppStyles.buttonText,
                           ),
                         ),

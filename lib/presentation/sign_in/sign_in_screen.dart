@@ -23,8 +23,14 @@ class SignInScreen extends StatelessWidget {
                   children: [
                     const SizedBox(height: 32),
                     const Text(
-                      'Company Logo Here',
-                      style: AppStyles.headline3,
+                      'AUTOMAKER',
+                      style: TextStyle(
+                        fontSize: 24, // Ajusta el tamaño según lo necesites
+                        fontWeight:
+                            FontWeight.bold, // Asegura un texto más destacado
+                        color: Colors
+                            .orange, // Cambia por el color exacto de tu botón si es diferente
+                      ),
                     ),
                     const SizedBox(height: 32),
                     const Text(
@@ -60,19 +66,9 @@ class SignInScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment
+                            .center, // Alinea todo al final (derecha)
                         children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: viewModel.rememberMe,
-                                onChanged: (value) {
-                                  viewModel.setRememberMe(value ?? false);
-                                },
-                              ),
-                              const Text('Remember Me'),
-                            ],
-                          ),
                           TextButton(
                             onPressed: () {},
                             child: const Text(
