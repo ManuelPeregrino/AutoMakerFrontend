@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-
 import 'dart:typed_data'; // Necesario para manejar los bytes de la imagen
 
 class SignInViewModel extends ChangeNotifier {
@@ -14,6 +13,13 @@ class SignInViewModel extends ChangeNotifier {
   Map<String, dynamic>? _userDetails;
   bool _isTwoFactorEnabled = false;
   Uint8List? _qrImageBytes; // Ahora guardamos los bytes de la imagen QR
+
+  String _resetCode = '';
+  String _newPassword = '';
+  String _confirmPassword = '';
+  bool _isResetCodeSent = false;
+
+  bool get isResetCodeSent => _isResetCodeSent;
 
   String get email => _email;
   String get password => _password;
@@ -195,6 +201,75 @@ class SignInViewModel extends ChangeNotifier {
       _errorMessage = 'An error occurred during 2FA authentication';
       notifyListeners();
       return false;
+    }
+  }
+
+  Future<bool> requestPasswordReset(String email) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    final url = Uri.parse(
+        'https://apiautomakerhost.serveirc.com/api/v1/auth/request-reset-password');
+    final headers = {'Content-Type': 'application/json'};
+    final body = json.encode({'email': email});
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 201) {
+        _isResetCodeSent = true;
+        _errorMessage = null;
+        notifyListeners();
+        return true;
+      } else {
+        _errorMessage = 'Failed to send reset code';
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _errorMessage = 'Network error: $e';
+      notifyListeners();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  // Reset password with code
+  Future<bool> resetPasswordWithCode(
+      String email, String code, String newPassword) async {
+    _isLoading = true;
+    _errorMessage = null;
+    notifyListeners();
+
+    final url = Uri.parse(
+        'https://apiautomakerhost.serveirc.com/api/v1/auth/reset-password');
+    final headers = {'Content-Type': 'application/json'};
+    final body =
+        json.encode({'email': email, 'code': code, 'newPassword': newPassword});
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 201) {
+        _errorMessage = null;
+        _isResetCodeSent = false;
+        notifyListeners();
+        return true;
+      } else {
+        _errorMessage = 'Failed to reset password';
+        notifyListeners();
+        return false;
+      }
+    } catch (e) {
+      _errorMessage = 'Network error: $e';
+      notifyListeners();
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
     }
   }
 }
