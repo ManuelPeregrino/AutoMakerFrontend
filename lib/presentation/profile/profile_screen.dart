@@ -30,8 +30,7 @@ class ProfileScreen extends StatelessWidget {
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  onPressed: () {
-                  },
+                  onPressed: () {},
                   icon: const Icon(Icons.edit, color: Colors.orange),
                 ),
               ],
@@ -100,13 +99,34 @@ class ProfileScreen extends StatelessWidget {
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               subtitle: const Text('Plan Free'),
-              onTap: () {
-              },
+              onTap: () {},
             ),
             const SizedBox(height: 32),
+            ElevatedButton.icon(
+              onPressed: viewModel.isLoadingReport
+                  ? null
+                  : () {
+                      viewModel.generateReport();
+                    },
+              icon: const Icon(Icons.picture_as_pdf),
+              label: const Text('Generar Reporte PDF'),
+            ),
+            if (viewModel.isLoadingReport)
+              const Padding(
+                padding: EdgeInsets.only(top: 8.0),
+                child: CircularProgressIndicator(),
+              ),
+            if (viewModel.reportErrorMessage != null)
+              Padding(
+                padding: const EdgeInsets.only(top: 8.0),
+                child: Text(
+                  viewModel.reportErrorMessage!,
+                  style: const TextStyle(color: Colors.red),
+                ),
+              ),
+            const SizedBox(height: 32),
             TextButton(
-              onPressed: () {
-              },
+              onPressed: () {},
               child: const Text(
                 'Cerrar Sesión',
                 style: TextStyle(color: Colors.red),
