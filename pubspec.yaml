@@ -30,3 +30,4 @@ flutter:
   assets:
     - assets/printer_image.png
     - assets/profile_image.png
+    - assets/app_icon.png

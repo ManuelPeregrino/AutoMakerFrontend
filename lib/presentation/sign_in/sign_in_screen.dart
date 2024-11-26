@@ -22,15 +22,12 @@ class SignInScreen extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const SizedBox(height: 32),
-                    const Text(
-                      'AUTOMAKER',
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.orange,
-                      ),
+                    Image.asset(
+                      "assets/app_icon.png",
+                      height: 150, // Ajusta el tamaño según sea necesario
+                      width: 150,
                     ),
-                    const SizedBox(height: 32),
+                    const SizedBox(height: 12),
                     const Text(
                       'Sign In',
                       style: AppStyles.headline1,
