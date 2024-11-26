@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'home_viewmodel.dart';
+import 'home_viewmodel.dart'; // Import the HomeViewModel
 import '../widgets/ham_menu.dart';
 import '../widgets/printer_item.dart';
 import '../widgets/report_card.dart';
@@ -11,7 +11,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => HomeViewModel()..fetchPrinters(),
+      create: (_) => HomeViewModel(), // Initialize HomeViewModel
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -31,7 +31,12 @@ class HomeScreen extends StatelessWidget {
         ),
         drawer: const HamMenu(),
         body: Consumer<HomeViewModel>(
-          builder: (context, viewModel, child) {
+          builder: (context, homeViewModel, child) {
+            // Checking if user session data is loaded
+            if (homeViewModel.firstName == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
             return SingleChildScrollView(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
@@ -47,7 +52,7 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 12),
                           Text(
-                            viewModel.farmName,
+                            'Granja Farm',
                             style: const TextStyle(
                               fontSize: 24,
                               fontWeight: FontWeight.bold,
@@ -55,7 +60,11 @@ class HomeScreen extends StatelessWidget {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            viewModel.userName,
+                            '${homeViewModel.firstName ?? ''} ${homeViewModel.lastName ?? ''}'
+                                    .trim()
+                                    .isEmpty
+                                ? 'Farm'
+                                : '${homeViewModel.firstName} ${homeViewModel.lastName}',
                             style: const TextStyle(
                               fontSize: 18,
                               color: Colors.grey,
@@ -75,7 +84,7 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     ReportCard(
                       title: 'Gastos e Ingresos',
-                      value: 'Placeholder',
+                      value: 'Placeholder', // Replace with actual value
                       borderColor: Colors.green,
                     ),
                     const SizedBox(height: 24),
@@ -87,7 +96,7 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    viewModel.isLoading
+                    homeViewModel.isLoading
                         ? const Center(child: CircularProgressIndicator())
                         : GridView.builder(
                             shrinkWrap: true,
@@ -99,12 +108,12 @@ class HomeScreen extends StatelessWidget {
                               mainAxisSpacing: 10,
                               childAspectRatio: 1,
                             ),
-                            itemCount: viewModel.printers.length,
+                            itemCount: homeViewModel.printers.length,
                             itemBuilder: (context, index) {
-                              final printer = viewModel.printers[index];
+                              final printer = homeViewModel.printers[index];
                               return PrinterItem(
                                 printerName: printer.name,
-                                onTap: () => viewModel.navigateToPrinter(
+                                onTap: () => homeViewModel.navigateToPrinter(
                                     context, printer.id),
                               );
                             },
