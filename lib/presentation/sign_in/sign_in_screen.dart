@@ -266,35 +266,53 @@ class SignInScreen extends StatelessWidget {
                 TextButton(
                   onPressed: () async {
                     if (!viewModel.isResetCodeSent) {
-                      // Request reset code
+                      // Solicitar el código de restablecimiento
                       final success = await viewModel
                           .requestPasswordReset(emailController.text);
                       if (success) {
-                        setState(() {}); // Refresh the dialog
+                        setState(() {}); // Actualizar el diálogo
                       }
                     } else {
-                      // Validate passwords match
-                      if (passwordController.text !=
-                          confirmPasswordController.text) {
+                      // Validar contraseñas
+                      final newPassword = passwordController.text;
+                      final confirmPassword = confirmPasswordController.text;
+
+                      if (newPassword != confirmPassword) {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text('Passwords do not match')),
+                            content: Text('Passwords do not match'),
+                          ),
                         );
                         return;
                       }
 
-                      // Reset password with code
+                      if (newPassword.length < 8 ||
+                          !RegExp(r'[A-Za-z]').hasMatch(newPassword) ||
+                          !RegExp(r'[0-9]').hasMatch(newPassword) ||
+                          !RegExp(r'[!@#$%^&*(),.?":{}|<>]')
+                              .hasMatch(newPassword)) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                'Password must be at least 8 characters long, include a letter, a number, and a special character.'),
+                          ),
+                        );
+                        return;
+                      }
+
+                      // Restablecer la contraseña
                       final success = await viewModel.resetPasswordWithCode(
                         emailController.text,
                         codeController.text,
-                        passwordController.text,
+                        newPassword,
                       );
 
                       if (success && context.mounted) {
                         Navigator.of(context).pop();
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
-                              content: Text('Password reset successfully')),
+                            content: Text('Password reset successfully'),
+                          ),
                         );
                       }
                     }

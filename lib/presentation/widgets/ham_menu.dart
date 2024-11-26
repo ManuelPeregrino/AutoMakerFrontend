@@ -12,7 +12,7 @@ class HamMenu extends StatelessWidget {
         children: [
           const DrawerHeader(
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Color.fromARGB(255, 242, 138, 48),
             ),
             child: Text(
               'Menu',
@@ -54,7 +54,7 @@ class HamMenu extends StatelessWidget {
               );
             },
           ),
-          ListTile(
+          /*ListTile(
             leading: const Icon(Icons.login),
             title: const Text('Sign In'),
             onTap: () {
@@ -67,7 +67,7 @@ class HamMenu extends StatelessWidget {
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.signUp);
             },
-          ),
+          ),*/
         ],
       ),
     );

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'profile_view_model.dart';
+import '../../core/constants/app_routes.dart'; // Import your routes
 
 class ProfileScreen extends StatelessWidget {
   const ProfileScreen({super.key});
@@ -18,35 +19,38 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 40),
             const CircleAvatar(
               radius: 60,
-              backgroundImage: AssetImage('assets/profile_image.png'),
+              backgroundImage: AssetImage('assets/app_icon.png'),
             ),
             const SizedBox(height: 16),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const Text(
-                  'Eduardo VH',
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                Text(
+                  '${viewModel.firstName ?? 'User'} ${viewModel.lastName ?? ''}',
+                  style: const TextStyle(
+                      fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 8),
                 IconButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    // TODO: Implement profile edit functionality
+                  },
                   icon: const Icon(Icons.edit, color: Colors.orange),
                 ),
               ],
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Nombre de la granja',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              viewModel.email ?? 'Email not available',
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 4),
-            const Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Icon(Icons.account_circle),
-                SizedBox(width: 8),
-                Text("Eduardo's Farm"),
+                const Icon(Icons.account_circle),
+                const SizedBox(width: 8),
+                Text(viewModel.role ?? 'Role not set'),
               ],
             ),
             const SizedBox(height: 16),
@@ -126,7 +130,12 @@ class ProfileScreen extends StatelessWidget {
               ),
             const SizedBox(height: 32),
             TextButton(
-              onPressed: () {},
+              onPressed: () {
+                // Logout functionality
+                viewModel.logout();
+                // Navigate back to login screen
+                Navigator.of(context).pushReplacementNamed(AppRoutes.signIn);
+              },
               child: const Text(
                 'Cerrar Sesión',
                 style: TextStyle(color: Colors.red),

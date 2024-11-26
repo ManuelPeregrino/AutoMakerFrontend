@@ -13,6 +13,7 @@ dependencies:
   fl_chart: ^0.40.0
   http: ^0.13.4
   flutter_launcher_icons: ^0.11.0
+  shared_preferences: ^2.1.1
 
 flutter_icons:
   android: true

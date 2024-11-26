@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:typed_data'; // Necesario para manejar los bytes de la imagen
@@ -46,6 +47,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  @override
   Future<void> signIn() async {
     _errorMessage = null;
     _isLoading = true;
@@ -65,15 +67,17 @@ class SignInViewModel extends ChangeNotifier {
       if (response.statusCode == 201) {
         final data = json.decode(response.body);
 
-        // Verificar si el usuario está activo y si el código es correcto
         if (data['user']['active'] == true) {
           _accessToken = data['access_token'];
           _userDetails = data['user'];
           _isTwoFactorEnabled = data['user']['isTwoFactorEnable'];
+
+          // Save the user session
+          await saveUserSession();
+
           _isLoading = false;
           notifyListeners();
         } else {
-          // Si el usuario no está activo o el código es incorrecto
           _errorMessage = 'Invalid authentication code or inactive user';
           _isLoading = false;
           notifyListeners();
@@ -130,7 +134,7 @@ class SignInViewModel extends ChangeNotifier {
     if (!_isTwoFactorEnabled) {
       // Caso cuando 2FA aún no está habilitado
       final url =
-          Uri.parse('https://automakergateway.serveirc.com/api/2fa/turn-on-qr');
+          Uri.parse('https://automakergateway.serveirc.com/api/2fa/turn-on');
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $_accessToken'
@@ -277,5 +281,59 @@ class SignInViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> saveUserSession() async {
+    if (_userDetails == null || _accessToken == null) return;
+
+    final prefs = await SharedPreferences.getInstance();
+
+    // Save individual user details
+    await prefs.setString('userId', _userDetails!['_id']);
+    await prefs.setString('firstName', _userDetails!['firstName']);
+    await prefs.setString('lastName', _userDetails!['lastName']);
+    await prefs.setString('email', _userDetails!['email']);
+    await prefs.setString('role', _userDetails!['role']);
+
+    // Save access token
+    await prefs.setString('accessToken', _accessToken!);
+  }
+
+  // New method to retrieve saved user session
+  Future<Map<String, dynamic>?> getUserSession() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    final userId = prefs.getString('userId');
+    if (userId == null) return null;
+
+    return {
+      'userId': userId,
+      'firstName': prefs.getString('firstName'),
+      'lastName': prefs.getString('lastName'),
+      'email': prefs.getString('email'),
+      'role': prefs.getString('role'),
+      'accessToken': prefs.getString('accessToken'),
+    };
+  }
+
+  // New method to clear user session (logout)
+  Future<void> clearUserSession() async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.remove('userId');
+    await prefs.remove('firstName');
+    await prefs.remove('lastName');
+    await prefs.remove('email');
+    await prefs.remove('role');
+    await prefs.remove('accessToken');
+
+    // Reset view model properties
+    _accessToken = null;
+    _userDetails = null;
+    _isTwoFactorEnabled = false;
+    _email = '';
+    _password = '';
+
+    notifyListeners();
   }
 }
