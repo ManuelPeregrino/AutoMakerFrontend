@@ -52,7 +52,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url =
-        Uri.parse('https://apiautomakerhost.serveirc.com/api/v1/auth/signIn');
+        Uri.parse('https://automakergateway.serveirc.com/api/auth/signIn');
     final headers = {'Content-Type': 'application/json'};
     final body = json.encode({
       'email': _email,
@@ -94,8 +94,8 @@ class SignInViewModel extends ChangeNotifier {
   Future<void> generateQrCode() async {
     if (_accessToken == null) return;
 
-    final url = Uri.parse(
-        'https://apiautomakerhost.serveirc.com/api/v1/2fa/generate-qr');
+    final url =
+        Uri.parse('https://automakergateway.serveirc.com/api/2fa/generate-qr');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $_accessToken'
@@ -105,15 +105,21 @@ class SignInViewModel extends ChangeNotifier {
       final response = await http.post(url, headers: headers);
 
       if (response.statusCode == 201) {
-        _qrImageBytes = response.bodyBytes; // Guardamos los bytes de la imagen
-        _errorMessage = null;
+        final data = json.decode(response.body);
+        if (data['qrCode'] != null) {
+          _qrImageBytes = base64Decode(data['qrCode']); // Decodifica la imagen
+          _errorMessage = null;
+        } else {
+          _qrImageBytes = null;
+          _errorMessage = 'QR code not found in response';
+        }
         notifyListeners();
       } else {
         _errorMessage = 'Failed to generate QR code';
         notifyListeners();
       }
     } catch (e) {
-      _errorMessage = 'An error occurred during QR generation';
+      _errorMessage = 'An error occurred during QR generation: $e';
       notifyListeners();
     }
   }
@@ -123,8 +129,8 @@ class SignInViewModel extends ChangeNotifier {
 
     if (!_isTwoFactorEnabled) {
       // Caso cuando 2FA aún no está habilitado
-      final url = Uri.parse(
-          'https://apiautomakerhost.serveirc.com/api/v1/2fa/turn-on-qr');
+      final url =
+          Uri.parse('https://automakergateway.serveirc.com/api/2fa/turn-on-qr');
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $_accessToken'
@@ -167,8 +173,8 @@ class SignInViewModel extends ChangeNotifier {
       return false;
     }
 
-    final url = Uri.parse(
-        'https://apiautomakerhost.serveirc.com/api/v1/2fa/authenticate');
+    final url =
+        Uri.parse('https://automakergateway.serveirc.com/api/2fa/authenticate');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $_accessToken'
@@ -210,7 +216,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url = Uri.parse(
-        'https://apiautomakerhost.serveirc.com/api/v1/auth/request-reset-password');
+        'https://automakergateway.serveirc.com/api/auth/request-reset-password');
     final headers = {'Content-Type': 'application/json'};
     final body = json.encode({'email': email});
 
@@ -245,7 +251,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url = Uri.parse(
-        'https://apiautomakerhost.serveirc.com/api/v1/auth/reset-password');
+        'https://automakergateway.serveirc.com/api/auth/reset-password');
     final headers = {'Content-Type': 'application/json'};
     final body =
         json.encode({'email': email, 'code': code, 'newPassword': newPassword});
