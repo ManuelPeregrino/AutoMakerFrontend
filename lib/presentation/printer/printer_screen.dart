@@ -41,14 +41,14 @@ class PrinterScreen extends StatelessWidget {
                 children: [
                   Card(
                     child: ListTile(
-                      title: const Text('Estado de Impresión'),
+                      title: const Text('Print'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Progreso: ${model.progress}%'),
-                          Text('Tiempo Restante: ${model.remainingTime}'),
+                          Text('Progress: ${model.progress}%'),
+                          Text('Remaining Time: ${model.remainingTime}'),
                           Text(
-                            'Estado: ${model.printStatus}',
+                            'Status: ${model.printStatus}',
                             style: TextStyle(
                                 color: model.printStatus == 'Active'
                                     ? Colors.green
@@ -62,14 +62,14 @@ class PrinterScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Card(
                     child: ListTile(
-                      title: const Text('Temperaturas'),
+                      title: const Text('Temperatures'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                              'Extrusor: ${model.extruderTempCurrent}°C / ${model.extruderTempTarget}°C'),
+                              'Extruder: ${model.extruderTempCurrent}°C / ${model.extruderTempTarget}°C'),
                           Text(
-                              'Cama: ${model.bedTempCurrent}°C / ${model.bedTempTarget}°C'),
+                              'Bed: ${model.bedTempCurrent}°C / ${model.bedTempTarget}°C'),
                         ],
                       ),
                       leading: const Icon(Icons.thermostat),
@@ -78,12 +78,12 @@ class PrinterScreen extends StatelessWidget {
                   const SizedBox(height: 16),
                   Card(
                     child: ListTile(
-                      title: const Text('Uso de Filamento'),
+                      title: const Text('Filament'),
                       subtitle: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text('Longitud: ${model.filamentLength} m'),
-                          Text('Volumen: ${model.filamentVolume} cm³'),
+                          Text('Length: ${model.filamentLength} m'),
+                          Text('Volume: ${model.filamentVolume} cm³'),
                         ],
                       ),
                       leading: const Icon(Icons.category),

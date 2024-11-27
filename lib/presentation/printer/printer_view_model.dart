@@ -28,7 +28,7 @@ class PrinterViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url =
-        Uri.parse('https://exampleapi.com/api/v1/printer/$printerId'); // URL
+        Uri.parse(''); // URL
     final headers = {'Content-Type': 'application/json'};
 
     try {
