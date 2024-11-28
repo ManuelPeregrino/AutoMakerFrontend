@@ -1,6 +1,6 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class PrinterViewModel extends ChangeNotifier {
   String printerName = "";
@@ -22,33 +22,35 @@ class PrinterViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
+  // Cargar datos de la impresora desde la API
   Future<void> fetchPrinterData(String printerId) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-    final url =
-        Uri.parse('https://exampleapi.com/api/v1/printer/$printerId'); // URL
-    final headers = {'Content-Type': 'application/json'};
+    const String url =
+        'https://25b1-189-150-29-105.ngrok-free.app/printer/temperature/'; // URL actualizada de la API
 
     try {
-      final response = await http.get(url, headers: headers);
+      final response = await http.get(Uri.parse(url));
 
       if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+        final Map<String, dynamic> data = json.decode(response.body);
 
-        printerName = data['printerId'] ?? "";
-        printStatus = data['printStatus'] ?? "";
-        progress = (data['progress'] ?? 0).toDouble();
-        remainingTime = data['remainingTime'] ?? "";
+        // Actualizar los datos con la respuesta de la API
+        extruderTempCurrent = (data['tool_temperature'] ?? 0).toDouble();
+        extruderTempTarget = 0.0; // No disponible en la API
+        bedTempCurrent = (data['bed_temperature'] ?? 0).toDouble();
+        bedTempTarget = 0.0; // No disponible en la API
 
-        extruderTempCurrent = (data['extruderTempCurrent'] ?? 0).toDouble();
-        extruderTempTarget = (data['extruderTempTarget'] ?? 0).toDouble();
-        bedTempCurrent = (data['bedTempCurrent'] ?? 0).toDouble();
-        bedTempTarget = (data['bedTempTarget'] ?? 0).toDouble();
+        // Datos de ejemplo, puedes agregarlos según lo que necesites
+        printerName = 'Impresora 1';
+        printStatus = 'Printing';
+        progress = 75.0;
+        remainingTime = "00:45";
 
-        filamentLength = (data['filamentLength'] ?? 0).toDouble();
-        filamentVolume = (data['filamentVolume'] ?? 0).toDouble();
+        filamentLength = 10.0; // Valor de ejemplo
+        filamentVolume = 25.0; // Valor de ejemplo
 
         _isLoading = false;
         notifyListeners();

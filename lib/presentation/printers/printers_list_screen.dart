@@ -39,11 +39,14 @@ class PrintersListScreen extends StatelessWidget {
                               children: [
                                 Row(
                                   children: [
-                                    Icon(printer.icon, color: printer.statusColor, size: 28),
+                                    Icon(printer.icon,
+                                        color: printer.statusColor, size: 28),
                                     const SizedBox(width: 8),
                                     Text(
                                       printer.name,
-                                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                                      style: const TextStyle(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold),
                                     ),
                                   ],
                                 ),
@@ -53,18 +56,22 @@ class PrintersListScreen extends StatelessWidget {
                                   style: TextStyle(color: printer.statusColor),
                                 ),
                                 const SizedBox(height: 4),
-                                Text('${printer.progress}% Complete', style: TextStyle(color: Colors.green)),
+                                Text('${printer.progress}% Complete',
+                                    style: TextStyle(color: Colors.green)),
                                 const SizedBox(height: 4),
                                 LinearProgressIndicator(
                                   value: printer.progress / 100,
                                   backgroundColor: Colors.grey[300],
-                                  valueColor: AlwaysStoppedAnimation<Color>(printer.statusColor),
+                                  valueColor: AlwaysStoppedAnimation<Color>(
+                                      printer.statusColor),
                                 ),
                                 const SizedBox(height: 8),
                                 Row(
-                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
                                   children: [
-                                    Text('Extruder Temp: ${printer.extruderTemp}°C'),
+                                    Text(
+                                        'Extruder Temp: ${printer.extruderTemp}°C'),
                                     Text('Bed Temp: ${printer.bedTemp}°C'),
                                   ],
                                 ),

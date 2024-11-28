@@ -36,16 +36,16 @@ class HamMenu extends StatelessWidget {
               Navigator.pushNamed(context, AppRoutes.profile);
             },
           ),
-          ListTile(
+          /*ListTile(
             leading: const Icon(Icons.print),
             title: const Text('Printers'),
             onTap: () {
               Navigator.pushNamed(context, AppRoutes.printers);
             },
-          ),
+          ),*/
           ListTile(
             leading: const Icon(Icons.print),
-            title: const Text('Printer (Default)'),
+            title: const Text('Printer'),
             onTap: () {
               Navigator.pushNamed(
                 context,
