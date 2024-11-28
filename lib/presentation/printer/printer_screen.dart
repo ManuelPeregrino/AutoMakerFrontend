@@ -41,11 +41,64 @@ class PrinterScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+<<<<<<< HEAD
                   _buildStatusSection(model),
                   const SizedBox(height: 20),
                   _buildTemperatureSection(model),
                   const SizedBox(height: 20),
                   _buildFilamentUsageSection(model),
+=======
+                  Card(
+                    child: ListTile(
+                      title: const Text('Print'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Progress: ${model.progress}%'),
+                          Text('Remaining Time: ${model.remainingTime}'),
+                          Text(
+                            'Status: ${model.printStatus}',
+                            style: TextStyle(
+                                color: model.printStatus == 'Active'
+                                    ? Colors.green
+                                    : Colors.red),
+                          ),
+                        ],
+                      ),
+                      trailing: const Icon(Icons.print),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Temperatures'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                              'Extruder: ${model.extruderTempCurrent}°C / ${model.extruderTempTarget}°C'),
+                          Text(
+                              'Bed: ${model.bedTempCurrent}°C / ${model.bedTempTarget}°C'),
+                        ],
+                      ),
+                      leading: const Icon(Icons.thermostat),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Card(
+                    child: ListTile(
+                      title: const Text('Filament'),
+                      subtitle: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text('Length: ${model.filamentLength} m'),
+                          Text('Volume: ${model.filamentVolume} cm³'),
+                        ],
+                      ),
+                      leading: const Icon(Icons.category),
+                    ),
+                  ),
+>>>>>>> 46604165f618b16d07b4e1df04a6fc71b8690451
                 ],
               ),
             );

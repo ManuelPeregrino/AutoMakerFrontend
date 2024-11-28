@@ -31,12 +31,12 @@ class ProfileScreen extends StatelessWidget {
                       fontSize: 20, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(width: 8),
-                IconButton(
-                  onPressed: () {
-                    // TODO: Implement profile edit functionality
-                  },
-                  icon: const Icon(Icons.edit, color: Colors.orange),
-                ),
+                // IconButton(
+                //   onPressed: () {
+                //     // TODO: Implement profile edit functionality
+                //   },
+                //   icon: const Icon(Icons.edit, color: Colors.orange),
+                // ),
               ],
             ),
             const SizedBox(height: 8),
@@ -56,7 +56,7 @@ class ProfileScreen extends StatelessWidget {
             const SizedBox(height: 16),
             ListTile(
               title: const Text(
-                'Conectar con Octoprint',
+                'Connect to Octoprint',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),
               trailing: IconButton(
@@ -71,7 +71,7 @@ class ProfileScreen extends StatelessWidget {
                   TextField(
                     controller: viewModel.octoprintLinkController,
                     decoration: const InputDecoration(
-                      labelText: 'Enlace de OctoPrint',
+                      labelText: 'Link to OctoPrint',
                       border: OutlineInputBorder(),
                     ),
                   ),
@@ -84,7 +84,7 @@ class ProfileScreen extends StatelessWidget {
                         ? const CircularProgressIndicator(
                             color: Colors.white,
                           )
-                        : const Text('Conectar'),
+                        : const Text('Connect'),
                   ),
                   if (viewModel.errorMessage != null)
                     Padding(
@@ -97,14 +97,14 @@ class ProfileScreen extends StatelessWidget {
                 ],
               ),
             const SizedBox(height: 16),
-            ListTile(
-              title: const Text(
-                'Cambiar plan',
-                style: TextStyle(fontWeight: FontWeight.bold),
-              ),
-              subtitle: const Text('Plan Free'),
-              onTap: () {},
-            ),
+            // ListTile(
+            //   title: const Text(
+            //     'Cambiar plan',
+            //     style: TextStyle(fontWeight: FontWeight.bold),
+            //   ),
+            //   subtitle: const Text('Plan Free'),
+            //   onTap: () {},
+            // ),
             const SizedBox(height: 32),
             ElevatedButton.icon(
               onPressed: viewModel.isLoadingReport
@@ -113,7 +113,7 @@ class ProfileScreen extends StatelessWidget {
                       viewModel.generateReport();
                     },
               icon: const Icon(Icons.picture_as_pdf),
-              label: const Text('Generar Reporte PDF'),
+              label: const Text('Generate Report'),
             ),
             if (viewModel.isLoadingReport)
               const Padding(
@@ -137,7 +137,7 @@ class ProfileScreen extends StatelessWidget {
                 Navigator.of(context).pushReplacementNamed(AppRoutes.signIn);
               },
               child: const Text(
-                'Cerrar Sesión',
+                'Log Out',
                 style: TextStyle(color: Colors.red),
               ),
             ),
