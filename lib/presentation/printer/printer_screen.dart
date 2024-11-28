@@ -41,13 +41,11 @@ class PrinterScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-<<<<<<< HEAD
                   _buildStatusSection(model),
                   const SizedBox(height: 20),
                   _buildTemperatureSection(model),
                   const SizedBox(height: 20),
                   _buildFilamentUsageSection(model),
-=======
                   Card(
                     child: ListTile(
                       title: const Text('Print'),
@@ -98,7 +96,6 @@ class PrinterScreen extends StatelessWidget {
                       leading: const Icon(Icons.category),
                     ),
                   ),
->>>>>>> 46604165f618b16d07b4e1df04a6fc71b8690451
                 ],
               ),
             );

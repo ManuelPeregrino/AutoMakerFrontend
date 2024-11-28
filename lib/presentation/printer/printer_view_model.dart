@@ -28,14 +28,9 @@ class PrinterViewModel extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
 
-<<<<<<< HEAD
-    const String url =
-        'https://25b1-189-150-29-105.ngrok-free.app/printer/temperature/'; // URL actualizada de la API
-=======
-    final url =
-        Uri.parse(''); // URL
+    const String url ='https://0e8d-189-150-29-105.ngrok-free.app/printer/temperature/'; // URL
+    Uri.parse(''); // URL
     final headers = {'Content-Type': 'application/json'};
->>>>>>> 46604165f618b16d07b4e1df04a6fc71b8690451
 
     try {
       final response = await http.get(Uri.parse(url));
