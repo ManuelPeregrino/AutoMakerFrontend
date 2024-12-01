@@ -1,7 +1,9 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:csv/csv.dart';
 
 // Printer class
 class Printer {
@@ -30,6 +32,9 @@ class HomeViewModel extends ChangeNotifier {
   // Printers list and loading state
   List<Printer> printers = [];
   bool isLoading = false;
+
+  // CSV data
+  List<List<String>> csvData = [];
 
   // Getters for user details
   String? get userId => _userId;
@@ -78,6 +83,22 @@ class HomeViewModel extends ChangeNotifier {
     } finally {
       isLoading = false;
       notifyListeners();
+    }
+  }
+
+  // Load CSV file and parse its content
+  Future<void> loadCsvFile(String filePath) async {
+    try {
+      final file = File(filePath);
+      final content = await file.readAsString();
+      final rows = const CsvToListConverter().convert(content);
+
+      csvData = rows
+          .map((row) => row.map((cell) => cell.toString()).toList())
+          .toList();
+      notifyListeners();
+    } catch (e) {
+      debugPrint('Error loading CSV file: $e');
     }
   }
 

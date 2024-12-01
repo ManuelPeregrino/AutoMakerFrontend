@@ -1,9 +1,11 @@
+import 'dart:io';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'home_viewmodel.dart'; // Import the HomeViewModel
+import 'package:csv/csv.dart';
+import 'home_viewmodel.dart';
 import '../widgets/ham_menu.dart';
-import '../widgets/printer_item.dart';
-import '../widgets/report_card.dart';
+import '../../routing/app_router.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -11,7 +13,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => HomeViewModel(), // Initialize HomeViewModel
+      create: (_) => HomeViewModel(),
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -32,7 +34,6 @@ class HomeScreen extends StatelessWidget {
         drawer: const HamMenu(),
         body: Consumer<HomeViewModel>(
           builder: (context, homeViewModel, child) {
-            // Checking if user session data is loaded
             if (homeViewModel.firstName == null) {
               return const Center(child: CircularProgressIndicator());
             }
@@ -82,11 +83,44 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ReportCard(
-                      title: 'Gastos e Ingresos',
-                      value: 'Placeholder', // Replace with actual value
-                      borderColor: Colors.green,
+                    ElevatedButton(
+                      onPressed: () async {
+                        final result = await FilePicker.platform.pickFiles(
+                          type: FileType.custom,
+                          allowedExtensions: ['csv'],
+                        );
+                        if (result != null && result.files.isNotEmpty) {
+                          final filePath = result.files.single.path;
+                          if (filePath != null) {
+                            homeViewModel.loadCsvFile(filePath);
+                          }
+                        }
+                      },
+                      child: const Text('Cargar CSV'),
                     ),
+                    const SizedBox(height: 16),
+                    homeViewModel.csvData.isNotEmpty
+                        ? SingleChildScrollView(
+                            scrollDirection: Axis.horizontal,
+                            child: DataTable(
+                              columns: homeViewModel.csvData[0]
+                                  .map<DataColumn>(
+                                      (col) => DataColumn(label: Text(col)))
+                                  .toList(),
+                              rows: homeViewModel.csvData
+                                  .skip(1)
+                                  .map<DataRow>(
+                                    (row) => DataRow(
+                                      cells: row
+                                          .map<DataCell>(
+                                              (cell) => DataCell(Text(cell)))
+                                          .toList(),
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                          )
+                        : const Text('No se ha cargado ningún archivo CSV'),
                     const SizedBox(height: 24),
                     const Text(
                       'Printers',
@@ -96,28 +130,15 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    homeViewModel.isLoading
-                        ? const Center(child: CircularProgressIndicator())
-                        : GridView.builder(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 10,
-                              mainAxisSpacing: 10,
-                              childAspectRatio: 1,
-                            ),
-                            itemCount: homeViewModel.printers.length,
-                            itemBuilder: (context, index) {
-                              final printer = homeViewModel.printers[index];
-                              return PrinterItem(
-                                printerName: printer.name,
-                                onTap: () => homeViewModel.navigateToPrinter(
-                                    context, printer.id),
-                              );
-                            },
-                          ),
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      onPressed: () {
+                        Navigator.pushNamed(context, AppRoutes.printers);
+                      },
+                      child: const Text('Ver impresoras'),
+                    ),
                   ],
                 ),
               ),

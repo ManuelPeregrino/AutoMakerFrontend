@@ -7,14 +7,16 @@ class PrinterViewModel extends ChangeNotifier {
   String printStatus = "";
   double progress = 0.0;
   String remainingTime = "";
+  String printerState = "Desconocido";
+  String currentPrintTime = "N/A";
 
   double extruderTempCurrent = 0.0;
-  double extruderTempTarget = 0.0;
   double bedTempCurrent = 0.0;
-  double bedTempTarget = 0.0;
 
   double filamentLength = 0.0;
   double filamentVolume = 0.0;
+
+  List<int> weeklyPrints = [5, 10, 15, 20, 12, 8, 6]; // Datos de ejemplo
 
   bool _isLoading = false;
   String? _errorMessage;
@@ -22,51 +24,62 @@ class PrinterViewModel extends ChangeNotifier {
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
 
-  // Cargar datos de la impresora desde la API
+  // Cargar datos de la impresora desde los endpoints
   Future<void> fetchPrinterData(String printerId) async {
     _isLoading = true;
     _errorMessage = null;
     notifyListeners();
 
-<<<<<<< HEAD
-    const String url =
-        'https://25b1-189-150-29-105.ngrok-free.app/printer/temperature/'; // URL actualizada de la API
-=======
-    final url =
-        Uri.parse(''); // URL
-    final headers = {'Content-Type': 'application/json'};
->>>>>>> 46604165f618b16d07b4e1df04a6fc71b8690451
+    const String tempUrl =
+        'https://2e5a-189-150-29-105.ngrok-free.app/printer/temperature/';
+    const String statusUrl =
+        'https://2e5a-189-150-29-105.ngrok-free.app/status/';
 
     try {
-      final response = await http.get(Uri.parse(url));
+      // Solicitar temperaturas
+      final tempResponse = await http.get(Uri.parse(tempUrl));
+      // Solicitar estado
+      final statusResponse = await http.get(Uri.parse(statusUrl));
 
-      if (response.statusCode == 200) {
-        final Map<String, dynamic> data = json.decode(response.body);
+      if (tempResponse.statusCode == 200 && statusResponse.statusCode == 200) {
+        final Map<String, dynamic> tempData = json.decode(tempResponse.body);
+        final Map<String, dynamic> statusData =
+            json.decode(statusResponse.body);
 
-        // Actualizar los datos con la respuesta de la API
-        extruderTempCurrent = (data['tool_temperature'] ?? 0).toDouble();
-        extruderTempTarget = 0.0; // No disponible en la API
-        bedTempCurrent = (data['bed_temperature'] ?? 0).toDouble();
-        bedTempTarget = 0.0; // No disponible en la API
+        // Datos de temperaturas
+        extruderTempCurrent = (tempData['tool_temperature'] ?? 0).toDouble();
+        bedTempCurrent = (tempData['bed_temperature'] ?? 0).toDouble();
 
-        // Datos de ejemplo, puedes agregarlos según lo que necesites
+        // Datos de estado
+        printerState = statusData['state'] ?? "Desconocido";
+        currentPrintTime = statusData['current_print_time'] != null
+            ? statusData['current_print_time'].toString()
+            : "N/A";
+
+        // Valores adicionales para mostrar en la interfaz
         printerName = 'Impresora 1';
-        printStatus = 'Printing';
-        progress = 75.0;
-        remainingTime = "00:45";
+        printStatus =
+            printerState == "Operational" ? "Operational" : "Printing";
+        progress = printerState == "Operational" ? 0 : 75.0;
+        remainingTime = printerState == "Operational" ? "N/A" : "00:45";
 
-        filamentLength = 10.0; // Valor de ejemplo
-        filamentVolume = 25.0; // Valor de ejemplo
+        filamentLength = 10.0;
+        filamentVolume = 25.0;
+
+        // Aquí puedes actualizar weeklyPrints si los datos vienen de un endpoint
+        weeklyPrints = [5, 12, 8, 10, 15, 6, 4]; // Valores de prueba
 
         _isLoading = false;
         notifyListeners();
       } else {
-        _errorMessage = "Error: ${response.reasonPhrase}";
+        _errorMessage =
+            "Error: ${tempResponse.reasonPhrase ?? 'Desconocido'} y ${statusResponse.reasonPhrase ?? 'Desconocido'}";
         _isLoading = false;
         notifyListeners();
       }
-    } catch (e) {
+    } catch (e, stackTrace) {
       _errorMessage = "Error de red: $e";
+      debugPrint("Detalles del error: $stackTrace");
       _isLoading = false;
       notifyListeners();
     }

@@ -36,7 +36,6 @@ class HamMenu extends StatelessWidget {
               Navigator.pushNamed(context, AppRoutes.profile);
             },
           ),
-<<<<<<< HEAD
           /*ListTile(
             leading: const Icon(Icons.print),
             title: const Text('Printers'),
@@ -44,15 +43,6 @@ class HamMenu extends StatelessWidget {
               Navigator.pushNamed(context, AppRoutes.printers);
             },
           ),*/
-=======
-          // ListTile(
-          //   leading: const Icon(Icons.print),
-          //   title: const Text('Printers'),
-          //   onTap: () {
-          //     Navigator.pushNamed(context, AppRoutes.printers);
-          //   },
-          // ),
->>>>>>> 46604165f618b16d07b4e1df04a6fc71b8690451
           ListTile(
             leading: const Icon(Icons.print),
             title: const Text('Printer'),

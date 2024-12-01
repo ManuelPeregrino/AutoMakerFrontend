@@ -41,64 +41,12 @@ class PrinterScreen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-<<<<<<< HEAD
                   _buildStatusSection(model),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                   _buildTemperatureSection(model),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 16),
                   _buildFilamentUsageSection(model),
-=======
-                  Card(
-                    child: ListTile(
-                      title: const Text('Print'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Progress: ${model.progress}%'),
-                          Text('Remaining Time: ${model.remainingTime}'),
-                          Text(
-                            'Status: ${model.printStatus}',
-                            style: TextStyle(
-                                color: model.printStatus == 'Active'
-                                    ? Colors.green
-                                    : Colors.red),
-                          ),
-                        ],
-                      ),
-                      trailing: const Icon(Icons.print),
-                    ),
-                  ),
                   const SizedBox(height: 16),
-                  Card(
-                    child: ListTile(
-                      title: const Text('Temperatures'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                              'Extruder: ${model.extruderTempCurrent}°C / ${model.extruderTempTarget}°C'),
-                          Text(
-                              'Bed: ${model.bedTempCurrent}°C / ${model.bedTempTarget}°C'),
-                        ],
-                      ),
-                      leading: const Icon(Icons.thermostat),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Card(
-                    child: ListTile(
-                      title: const Text('Filament'),
-                      subtitle: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text('Length: ${model.filamentLength} m'),
-                          Text('Volume: ${model.filamentVolume} cm³'),
-                        ],
-                      ),
-                      leading: const Icon(Icons.category),
-                    ),
-                  ),
->>>>>>> 46604165f618b16d07b4e1df04a6fc71b8690451
                 ],
               ),
             );
@@ -112,11 +60,11 @@ class PrinterScreen extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(24),
       decoration: BoxDecoration(
-        color: model.printStatus == 'Active'
+        color: model.printStatus == 'Operational'
             ? Colors.green.shade50
             : Colors.red.shade50,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 8,
@@ -129,27 +77,28 @@ class PrinterScreen extends StatelessWidget {
           Icon(
             Icons.print,
             size: 50,
-            color: model.printStatus == 'Active' ? Colors.green : Colors.red,
+            color:
+                model.printStatus == 'Operational' ? Colors.green : Colors.red,
           ),
           const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Estado de Impresión',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 const SizedBox(height: 8),
                 Text('Progreso: ${model.progress}%',
-                    style: TextStyle(fontSize: 20)),
+                    style: const TextStyle(fontSize: 20)),
                 Text('Tiempo Restante: ${model.remainingTime}',
-                    style: TextStyle(fontSize: 20)),
+                    style: const TextStyle(fontSize: 20)),
                 Text(
                   'Estado: ${model.printStatus}',
                   style: TextStyle(
                     fontSize: 20,
-                    color: model.printStatus == 'Active'
+                    color: model.printStatus == 'Operational'
                         ? Colors.green
                         : Colors.red,
                     fontWeight: FontWeight.bold,
@@ -169,7 +118,7 @@ class PrinterScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.orange.shade50,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 8,
@@ -179,7 +128,7 @@ class PrinterScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.thermostat,
             size: 50,
             color: Colors.orange,
@@ -189,15 +138,15 @@ class PrinterScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Temperaturas',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 const SizedBox(height: 8),
                 Text('Extrusor: ${model.extruderTempCurrent}°C',
-                    style: TextStyle(fontSize: 20)),
+                    style: const TextStyle(fontSize: 20)),
                 Text('Cama: ${model.bedTempCurrent}°C',
-                    style: TextStyle(fontSize: 20)),
+                    style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),
@@ -212,7 +161,7 @@ class PrinterScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.blue.shade50,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
+        boxShadow: const [
           BoxShadow(
             color: Colors.black26,
             blurRadius: 8,
@@ -222,7 +171,7 @@ class PrinterScreen extends StatelessWidget {
       ),
       child: Row(
         children: [
-          Icon(
+          const Icon(
             Icons.category,
             size: 50,
             color: Colors.blue,
@@ -232,15 +181,15 @@ class PrinterScreen extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   'Uso de Filamento',
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22),
                 ),
                 const SizedBox(height: 8),
                 Text('Longitud: ${model.filamentLength} m',
-                    style: TextStyle(fontSize: 20)),
+                    style: const TextStyle(fontSize: 20)),
                 Text('Volumen: ${model.filamentVolume} cm³',
-                    style: TextStyle(fontSize: 20)),
+                    style: const TextStyle(fontSize: 20)),
               ],
             ),
           ),

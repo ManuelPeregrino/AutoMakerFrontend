@@ -12,7 +12,7 @@ class PrintersListViewModel extends ChangeNotifier {
   // Función para cargar los datos de la API
   Future<void> _loadPrinterData() async {
     const String url =
-        'https://25b1-189-150-29-105.ngrok-free.app/printer/temperature/';
+        'https://2e5a-189-150-29-105.ngrok-free.app/printer/temperature/';
 
     try {
       final response = await http.get(Uri.parse(url));
