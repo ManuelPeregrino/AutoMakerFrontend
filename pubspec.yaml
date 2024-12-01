@@ -1,6 +1,6 @@
 name: flutter_application_1
 description: "A new Flutter project."
-publish_to: 'none'
+publish_to: "none"
 version: 0.1.0
 
 environment:
@@ -9,6 +9,18 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  provider: ^6.1.2
+  fl_chart: ^0.40.0
+  http: ^0.13.4
+  file_picker: ^5.0.0
+  csv: ^5.0.0
+  flutter_launcher_icons: ^0.11.0
+  shared_preferences: ^2.1.1
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/app_icon.png"
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +29,8 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+  assets:
+    - assets/printer_image.png
+    - assets/profile_image.png
+    - assets/app_icon.png
