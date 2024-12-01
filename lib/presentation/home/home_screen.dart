@@ -130,15 +130,6 @@ class HomeScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: const Size(double.infinity, 50),
-                      ),
-                      onPressed: () {
-                        Navigator.pushNamed(context, AppRoutes.printers);
-                      },
-                      child: const Text('Ver impresoras'),
-                    ),
                   ],
                 ),
               ),
