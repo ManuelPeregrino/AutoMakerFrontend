@@ -1,27 +1,11 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:csv/csv.dart';
 
-// Printer class
-class Printer {
-  final int id;
-  final String name;
-
-  Printer({required this.id, required this.name});
-
-  factory Printer.fromJson(Map<String, dynamic> json) {
-    return Printer(
-      id: json['id'] as int,
-      name: json['name'] as String,
-    );
-  }
-}
-
 class HomeViewModel extends ChangeNotifier {
-  // User session details
   String? _userId;
   String? _firstName;
   String? _lastName;
@@ -29,27 +13,22 @@ class HomeViewModel extends ChangeNotifier {
   String? _role;
   String? _accessToken;
 
-  // Printers list and loading state
   List<Printer> printers = [];
   bool isLoading = false;
 
-  // CSV data
-  List<List<String>> csvData = [];
+  List<List<dynamic>> csvData = [];
 
-  // Getters for user details
   String? get userId => _userId;
   String? get firstName => _firstName;
   String? get lastName => _lastName;
   String? get email => _email;
   String? get role => _role;
 
-  // Constructor to load user session and printers
   HomeViewModel() {
     loadUserSession();
     fetchPrinters();
   }
 
-  // Load user session from SharedPreferences
   Future<void> loadUserSession() async {
     final prefs = await SharedPreferences.getInstance();
 
@@ -60,13 +39,11 @@ class HomeViewModel extends ChangeNotifier {
     _role = prefs.getString('role');
     _accessToken = prefs.getString('accessToken');
 
-    notifyListeners(); // Notify listeners when user session is loaded
+    notifyListeners();
   }
 
-  // Fetch printers from API
   Future<void> fetchPrinters() async {
-    const String apiUrl =
-        "https://your-api-url.com/printers"; // API URL for fetching printers
+    const String apiUrl = "https://your-api-url.com/printers";
     isLoading = true;
     notifyListeners();
 
@@ -86,40 +63,49 @@ class HomeViewModel extends ChangeNotifier {
     }
   }
 
-  // Load CSV file and parse its content
   Future<void> loadCsvFile(String filePath) async {
     try {
       final file = File(filePath);
       final content = await file.readAsString();
       final rows = const CsvToListConverter().convert(content);
 
-      csvData = rows
-          .map((row) => row.map((cell) => cell.toString()).toList())
-          .toList();
+      csvData = rows.map((row) => row).toList();
       notifyListeners();
     } catch (e) {
-      debugPrint('Error loading CSV file: $e');
+      debugPrint("Error loading CSV file: $e");
     }
   }
 
-  // Navigate to Printer Details Screen
-  void navigateToPrinter(BuildContext context, int printerId) {
-    Navigator.pushNamed(context, '/printer', arguments: {'id': printerId});
+  void updateRowCost(List<dynamic> row, double cost) {
+    final rowIndex = csvData.indexOf(row);
+    print("Fila a actualizar: $rowIndex");
+
+    if (rowIndex != -1) {
+      if (csvData[rowIndex].length > 6) {
+        csvData[rowIndex][6] =
+            cost.toStringAsFixed(2);
+      } else {
+        csvData[rowIndex]
+            .add(cost.toStringAsFixed(2));
+      }
+      print("Datos actualizados: ${csvData[rowIndex]}");
+      notifyListeners();
+    } else {
+      print("Error: No se encontró la fila");
+    }
   }
+}
 
-  // Logout method to clear session data
-  Future<void> logout() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.clear(); // Clear SharedPreferences
+class Printer {
+  final String name;
+  final String model;
 
-    // Reset user session data
-    _userId = null;
-    _firstName = null;
-    _lastName = null;
-    _email = null;
-    _role = null;
-    _accessToken = null;
+  Printer({required this.name, required this.model});
 
-    notifyListeners(); // Notify listeners that session has been cleared
+  factory Printer.fromJson(Map<String, dynamic> json) {
+    return Printer(
+      name: json['name'],
+      model: json['model'],
+    );
   }
 }
