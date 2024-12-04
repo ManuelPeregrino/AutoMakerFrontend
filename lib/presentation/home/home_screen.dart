@@ -49,15 +49,7 @@ class HomeScreen extends StatelessWidget {
                             radius: 40,
                             backgroundImage: AssetImage('assets/app_icon.png'),
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            'Granja Farm',
-                            style: const TextStyle(
-                              fontSize: 24,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(height: 4),
+                          const SizedBox(height: 6),
                           Text(
                             '${homeViewModel.firstName ?? ''} ${homeViewModel.lastName ?? ''}'
                                     .trim()
@@ -66,7 +58,7 @@ class HomeScreen extends StatelessWidget {
                                 : '${homeViewModel.firstName} ${homeViewModel.lastName}',
                             style: const TextStyle(
                               fontSize: 18,
-                              color: Colors.grey,
+                              color: Colors.black,
                             ),
                           ),
                         ],
@@ -95,6 +87,7 @@ class HomeScreen extends StatelessWidget {
                         }
                       },
                       style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
                         backgroundColor: Colors.orange,
                       ),
                       child: const Text('Cargar CSV'),
@@ -110,7 +103,7 @@ class HomeScreen extends StatelessWidget {
                                           label: Text(header.toString()),
                                         )),
                                 const DataColumn(
-                                  label: Text('Cost'),
+                                  label: Text('Calculate Price'),
                                 ),
                               ],
                               rows: homeViewModel.csvData.skip(1).map<DataRow>(
@@ -168,21 +161,21 @@ class HomeScreen extends StatelessWidget {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Calcular Costo'),
+          title: const Text('Calculate Cost'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: priceController,
                 decoration: const InputDecoration(
-                  labelText: 'Precio del rollo (en \$)',
+                  labelText: 'Spool Price (MXN)',
                 ),
                 keyboardType: TextInputType.number,
               ),
               TextField(
                 controller: lengthController,
                 decoration: const InputDecoration(
-                  labelText: 'Longitud del rollo (en metros)',
+                  labelText: 'Filament Spool Weight (KG)',
                 ),
                 keyboardType: TextInputType.number,
               ),
@@ -192,12 +185,12 @@ class HomeScreen extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 final price = double.tryParse(priceController.text);
-                final rollLength = double.tryParse(lengthController.text);
+                final spoolWeight = double.tryParse(lengthController.text);
 
                 if (price == null ||
-                    rollLength == null ||
+                    spoolWeight == null ||
                     price <= 0 ||
-                    rollLength <= 0) {
+                    spoolWeight <= 0) {
                   ScaffoldMessenger.of(context).showSnackBar(
                     const SnackBar(
                       content: Text(
@@ -219,8 +212,16 @@ class HomeScreen extends StatelessWidget {
                   return;
                 }
 
-                final costPerMM = price / (rollLength * 1000);
+                const avgSpoolLength = 330;
+
+                final costPerMM = price / (spoolWeight * (avgSpoolLength * 1000));
                 final totalCost = filamentLengthMM * costPerMM;
+
+                print("precio rollo: $price");
+                print("longitud rollo: $spoolWeight");
+                print("costo por mm: $costPerMM");
+                print("filamento usado: $filamentLengthMM");
+                print("total precio: $totalCost");
 
                 homeViewModel.updateRowCost(row, totalCost);
 
@@ -233,14 +234,18 @@ class HomeScreen extends StatelessWidget {
                   ),
                 );
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.orange),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.orange,
+                  foregroundColor: Colors.white),
               child: const Text('Calcular'),
             ),
             ElevatedButton(
               onPressed: () {
                 Navigator.pop(context);
               },
-              style: ElevatedButton.styleFrom(backgroundColor: Colors.grey),
+              style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.red[400],
+                  foregroundColor: Colors.white),
               child: const Text('Cancelar'),
             ),
           ],

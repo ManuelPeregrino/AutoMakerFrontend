@@ -69,8 +69,35 @@ class HomeViewModel extends ChangeNotifier {
       final content = await file.readAsString();
       final rows = const CsvToListConverter().convert(content);
 
-      csvData = rows.map((row) => row).toList();
-      notifyListeners();
+      if (rows.isNotEmpty) {
+        final desiredColumns = [
+          'File name',
+          'Timestamp',
+          'Success',
+          'Print time',
+          'Filament length'
+        ];
+        final selectedIndexes = rows.first
+            .asMap()
+            .entries
+            .where((entry) => desiredColumns.contains(entry.value))
+            .map((entry) => entry.key)
+            .toList();
+
+        final filteredRows = rows.map((row) {
+          return selectedIndexes.map((index) => row[index]).toList();
+        }).toList();
+
+        if (!filteredRows.first.contains('Price')) {
+          filteredRows.first.add('Price');
+          for (int i = 1; i < filteredRows.length; i++) {
+            filteredRows[i].add('');
+          }
+        }
+
+        csvData = filteredRows;
+        notifyListeners();
+      }
     } catch (e) {
       debugPrint("Error loading CSV file: $e");
     }
@@ -78,20 +105,20 @@ class HomeViewModel extends ChangeNotifier {
 
   void updateRowCost(List<dynamic> row, double cost) {
     final rowIndex = csvData.indexOf(row);
-    print("Fila a actualizar: $rowIndex");
 
     if (rowIndex != -1) {
-      if (csvData[rowIndex].length > 6) {
-        csvData[rowIndex][6] =
-            cost.toStringAsFixed(2);
-      } else {
-        csvData[rowIndex]
-            .add(cost.toStringAsFixed(2));
+      final priceColumnIndex = csvData.first.indexOf('Price');
+
+      if (priceColumnIndex == -1) {
+        debugPrint("Error: Columna 'Price' no encontrada.");
+        return;
       }
-      print("Datos actualizados: ${csvData[rowIndex]}");
+
+      csvData[rowIndex][priceColumnIndex] = cost.toStringAsFixed(2);
+      debugPrint("Datos actualizados: ${csvData[rowIndex]}");
       notifyListeners();
     } else {
-      print("Error: No se encontró la fila");
+      debugPrint("Error: No se encontró la fila");
     }
   }
 }

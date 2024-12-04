@@ -31,9 +31,9 @@ class PrinterViewModel extends ChangeNotifier {
     notifyListeners();
 
     const String tempUrl =
-        'https://2e5a-189-150-29-105.ngrok-free.app/printer/temperature/';
+        'https://automakerapi.ngrok.app/printer/temperature/';
     const String statusUrl =
-        'https://2e5a-189-150-29-105.ngrok-free.app/status/';
+        'https://automakerapi.ngrok.app/status/';
 
     try {
       // Solicitar temperaturas

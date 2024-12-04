@@ -18,7 +18,7 @@ class PrinterScreen extends StatelessWidget {
       child: Scaffold(
         appBar: AppBar(
           title: const Text('Detalles de la Impresora'),
-          backgroundColor: Colors.blueGrey,
+          backgroundColor: Colors.transparent,
           elevation: 0,
         ),
         body: Consumer<PrinterViewModel>(

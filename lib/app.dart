@@ -10,6 +10,7 @@ class AutoMakerApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'AutoMaker',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: AppStyles.primaryColor,
         colorScheme: ColorScheme.fromSeed(
