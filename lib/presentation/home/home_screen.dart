@@ -74,25 +74,25 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 16),
                     Row(
                       children: [
-                        ElevatedButton(
-                          onPressed: () async {
-                            final result = await FilePicker.platform.pickFiles(
-                              type: FileType.custom,
-                              allowedExtensions: ['csv'],
-                            );
-                            if (result != null && result.files.isNotEmpty) {
-                              final filePath = result.files.single.path;
-                              if (filePath != null) {
-                                homeViewModel.loadCsvFile(filePath);
-                              }
-                            }
-                          },
-                          style: ElevatedButton.styleFrom(
-                            foregroundColor: Colors.white,
-                            backgroundColor: Colors.orange,
-                          ),
-                          child: const Text('Cargar CSV'),
-                        ),
+                        // ElevatedButton(
+                        //   onPressed: () async {
+                        //     final result = await FilePicker.platform.pickFiles(
+                        //       type: FileType.custom,
+                        //       allowedExtensions: ['csv'],
+                        //     );
+                        //     if (result != null && result.files.isNotEmpty) {
+                        //       final filePath = result.files.single.path;
+                        //       if (filePath != null) {
+                        //         homeViewModel.loadCsvFile(filePath);
+                        //       }
+                        //     }
+                        //   },
+                        //   style: ElevatedButton.styleFrom(
+                        //     foregroundColor: Colors.white,
+                        //     backgroundColor: Colors.orange,
+                        //   ),
+                        //   child: const Text('Cargar CSV'),
+                        // ),
                         const SizedBox(width: 16),
                         ElevatedButton(
                           onPressed: () async {

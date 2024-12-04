@@ -96,10 +96,18 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> downloadCsvFile() async {
-    const String apiUrl = "https://automakerapi.ngrok.app/api/download_print_history/";
+    const String apiUrl =
+        "https://automakerapi.ngrok.app/download_print_history/";
 
     try {
-      final response = await http.get(Uri.parse(apiUrl));
+      // Incluye el token de acceso en los encabezados
+      final headers = {
+        'Authorization':
+            'Bearer $_accessToken', // Asegúrate de tener el token cargado
+      };
+
+      final response = await http.get(Uri.parse(apiUrl), headers: headers);
+
       if (response.statusCode == 200) {
         final directory = Directory.systemTemp;
         final filePath = '${directory.path}/print_history.csv';
@@ -110,7 +118,10 @@ class HomeViewModel extends ChangeNotifier {
         await loadCsvFile(filePath);
         notifyListeners();
       } else {
-        throw Exception('Failed to download CSV: ${response.statusCode}');
+        debugPrint(
+            'Error al descargar el archivo CSV. Código de estado: ${response.statusCode}');
+        throw Exception(
+            'Failed to download CSV: ${response.statusCode} - ${response.reasonPhrase}');
       }
     } catch (e) {
       debugPrint("Error downloading CSV file: $e");
