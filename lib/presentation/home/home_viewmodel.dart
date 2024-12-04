@@ -96,7 +96,7 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   Future<void> downloadCsvFile() async {
-    const String apiUrl = "https://automakerapi.ngrok.app/api/upload_print_history";
+    const String apiUrl = "https://automakerapi.ngrok.app/api/download_print_history/";
 
     try {
       final response = await http.get(Uri.parse(apiUrl));
