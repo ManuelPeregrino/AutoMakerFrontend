@@ -26,7 +26,7 @@ class HomeViewModel extends ChangeNotifier {
 
   HomeViewModel() {
     loadUserSession();
-    fetchPrinters();
+    // fetchPrinters();
   }
 
   Future<void> loadUserSession() async {
@@ -42,26 +42,26 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> fetchPrinters() async {
-    const String apiUrl = "https://your-api-url.com/printers";
-    isLoading = true;
-    notifyListeners();
+  // Future<void> fetchPrinters() async {
+  //   const String apiUrl = "https://your-api-url.com/printers";
+  //   isLoading = true;
+  //   notifyListeners();
 
-    try {
-      final response = await http.get(Uri.parse(apiUrl));
-      if (response.statusCode == 200) {
-        final List<dynamic> data = jsonDecode(response.body);
-        printers = data.map((json) => Printer.fromJson(json)).toList();
-      } else {
-        throw Exception('Failed to load printers');
-      }
-    } catch (e) {
-      debugPrint("Error fetching printers: $e");
-    } finally {
-      isLoading = false;
-      notifyListeners();
-    }
-  }
+  //   try {
+  //     final response = await http.get(Uri.parse(apiUrl));
+  //     if (response.statusCode == 200) {
+  //       final List<dynamic> data = jsonDecode(response.body);
+  //       printers = data.map((json) => Printer.fromJson(json)).toList();
+  //     } else {
+  //       throw Exception('Failed to load printers');
+  //     }
+  //   } catch (e) {
+  //     debugPrint("Error fetching printers: $e");
+  //   } finally {
+  //     isLoading = false;
+  //     notifyListeners();
+  //   }
+  // }
 
   Future<void> loadCsvFile(String filePath) async {
     try {
@@ -84,55 +84,55 @@ class HomeViewModel extends ChangeNotifier {
             .map((entry) => entry.key)
             .toList();
 
-        final filteredRows = rows.map((row) {
+        csvData = rows.map((row) {
           return selectedIndexes.map((index) => row[index]).toList();
         }).toList();
 
-        if (!filteredRows.first.contains('Price')) {
-          filteredRows.first.add('Price');
-          for (int i = 1; i < filteredRows.length; i++) {
-            filteredRows[i].add('');
-          }
-        }
-
-        csvData = filteredRows;
         notifyListeners();
       }
     } catch (e) {
-      debugPrint("Error loading CSV file: $e");
+      debugPrint('Error loading CSV file: $e');
+    }
+  }
+
+  Future<void> downloadCsvFile() async {
+    const String apiUrl = "https://automakerapi.ngrok.app/api/upload_print_history";
+
+    try {
+      final response = await http.get(Uri.parse(apiUrl));
+      if (response.statusCode == 200) {
+        final directory = Directory.systemTemp;
+        final filePath = '${directory.path}/print_history.csv';
+
+        final file = File(filePath);
+        await file.writeAsBytes(response.bodyBytes);
+
+        await loadCsvFile(filePath);
+        notifyListeners();
+      } else {
+        throw Exception('Failed to download CSV: ${response.statusCode}');
+      }
+    } catch (e) {
+      debugPrint("Error downloading CSV file: $e");
     }
   }
 
   void updateRowCost(List<dynamic> row, double cost) {
-    final rowIndex = csvData.indexOf(row);
-
-    if (rowIndex != -1) {
-      final priceColumnIndex = csvData.first.indexOf('Price');
-
-      if (priceColumnIndex == -1) {
-        debugPrint("Error: Columna 'Price' no encontrada.");
-        return;
-      }
-
-      csvData[rowIndex][priceColumnIndex] = cost.toStringAsFixed(2);
-      debugPrint("Datos actualizados: ${csvData[rowIndex]}");
-      notifyListeners();
-    } else {
-      debugPrint("Error: No se encontró la fila");
-    }
+    row.add(cost);
+    notifyListeners();
   }
 }
 
 class Printer {
   final String name;
-  final String model;
+  final String status;
 
-  Printer({required this.name, required this.model});
+  Printer({required this.name, required this.status});
 
   factory Printer.fromJson(Map<String, dynamic> json) {
     return Printer(
-      name: json['name'],
-      model: json['model'],
+      name: json['name'] as String,
+      status: json['status'] as String,
     );
   }
 }

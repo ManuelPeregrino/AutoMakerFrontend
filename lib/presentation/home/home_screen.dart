@@ -1,6 +1,5 @@
-import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:provider/provider.dart';
 import '../widgets/ham_menu.dart';
 import 'home_viewmodel.dart';
@@ -66,31 +65,46 @@ class HomeScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 24),
                     const Text(
-                      'Reports',
+                      'History',
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                     const SizedBox(height: 16),
-                    ElevatedButton(
-                      onPressed: () async {
-                        final result = await FilePicker.platform.pickFiles(
-                          type: FileType.custom,
-                          allowedExtensions: ['csv'],
-                        );
-                        if (result != null && result.files.isNotEmpty) {
-                          final filePath = result.files.single.path;
-                          if (filePath != null) {
-                            homeViewModel.loadCsvFile(filePath);
-                          }
-                        }
-                      },
-                      style: ElevatedButton.styleFrom(
-                        foregroundColor: Colors.white,
-                        backgroundColor: Colors.orange,
-                      ),
-                      child: const Text('Cargar CSV'),
+                    Row(
+                      children: [
+                        ElevatedButton(
+                          onPressed: () async {
+                            final result = await FilePicker.platform.pickFiles(
+                              type: FileType.custom,
+                              allowedExtensions: ['csv'],
+                            );
+                            if (result != null && result.files.isNotEmpty) {
+                              final filePath = result.files.single.path;
+                              if (filePath != null) {
+                                homeViewModel.loadCsvFile(filePath);
+                              }
+                            }
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.orange,
+                          ),
+                          child: const Text('Cargar CSV'),
+                        ),
+                        const SizedBox(width: 16),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await homeViewModel.downloadCsvFile();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            foregroundColor: Colors.white,
+                            backgroundColor: Colors.blue,
+                          ),
+                          child: const Text('Descargar CSV'),
+                        ),
+                      ],
                     ),
                     const SizedBox(height: 16),
                     homeViewModel.csvData.isNotEmpty
@@ -134,14 +148,6 @@ class HomeScreen extends StatelessWidget {
                           )
                         : const Text('No se ha cargado ningún archivo CSV'),
                     const SizedBox(height: 24),
-                    const Text(
-                      'Printers',
-                      style: TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 16),
                   ],
                 ),
               ),
@@ -216,12 +222,6 @@ class HomeScreen extends StatelessWidget {
 
                 final costPerMM = price / (spoolWeight * (avgSpoolLength * 1000));
                 final totalCost = filamentLengthMM * costPerMM;
-
-                print("precio rollo: $price");
-                print("longitud rollo: $spoolWeight");
-                print("costo por mm: $costPerMM");
-                print("filamento usado: $filamentLengthMM");
-                print("total precio: $totalCost");
 
                 homeViewModel.updateRowCost(row, totalCost);
 
