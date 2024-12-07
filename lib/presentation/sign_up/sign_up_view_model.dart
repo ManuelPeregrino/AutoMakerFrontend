@@ -74,7 +74,7 @@ class SignUpViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url = Uri.parse(
-        'https://automakernot.serveirc.com/api/v1/auth/register'); // Reemplaza con tu URL
+        'https://apiautomakerhost.serveirc.com/api/v1/auth/register'); // Reemplaza con tu URL
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'firstName': _firstName,

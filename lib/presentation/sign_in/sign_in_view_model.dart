@@ -54,7 +54,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url =
-        Uri.parse('https://automakernot.serveirc.com/api/v1/auth/signIn');
+        Uri.parse('https://apiautomakerhost.serveirc.com/api/v1/auth/signIn');
     final headers = {'Content-Type': 'application/json'};
     final body = json.encode({
       'email': _email,
@@ -98,8 +98,8 @@ class SignInViewModel extends ChangeNotifier {
   Future<void> generateQrCode() async {
     if (_accessToken == null) return;
 
-    final url =
-        Uri.parse('https://automakernot.serveirc.com/api/v1/2fa/generate-qr');
+    final url = Uri.parse(
+        'https://apiautomakerhost.serveirc.com/api/v1/2fa/generate-qr');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $_accessToken'
@@ -134,7 +134,7 @@ class SignInViewModel extends ChangeNotifier {
     if (!_isTwoFactorEnabled) {
       // Caso cuando 2FA aún no está habilitado
       final url =
-          Uri.parse('https://automakernot.serveirc.com/api/v1/2fa/turn-on');
+          Uri.parse('https://apiautomakerhost.serveirc.com/api/v1/2fa/turn-on');
       final headers = {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $_accessToken'
@@ -177,8 +177,8 @@ class SignInViewModel extends ChangeNotifier {
       return false;
     }
 
-    final url =
-        Uri.parse('https://automakernot.serveirc.com/api/v1/2fa/authenticate');
+    final url = Uri.parse(
+        'https://apiautomakerhost.serveirc.com/api/v1/2fa/authenticate');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $_accessToken'
@@ -220,7 +220,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url = Uri.parse(
-        'https://automakernot.serveirc.com/api/v1/auth/request-reset-password');
+        'https://apiautomakerhost.serveirc.com/api/v1/auth/request-reset-password');
     final headers = {'Content-Type': 'application/json'};
     final body = json.encode({'email': email});
 
@@ -255,7 +255,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
 
     final url = Uri.parse(
-        'https://automakernot.serveirc.com/api/v1/auth/reset-password');
+        'https://apiautomakerhost.serveirc.com/api/v1/auth/reset-password');
     final headers = {'Content-Type': 'application/json'};
     final body =
         json.encode({'email': email, 'code': code, 'newPassword': newPassword});
