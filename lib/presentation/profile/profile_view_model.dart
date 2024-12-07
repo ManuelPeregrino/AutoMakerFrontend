@@ -6,7 +6,7 @@ import 'dart:io';
 
 class ProfileViewModel extends ChangeNotifier {
   final String baseUrl =
-      "https://automakergateway.serveirc.com/api"; // Updated base URL
+      "https://automakernot.serveirc.com/api/v1/"; // Updated base URL
 
   // User details
   String? _userId;
